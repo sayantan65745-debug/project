@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resume Ranker – File Upload</title>
+
+  <!-- React + ReactDOM -->
+  <script crossorigin src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
+
+  <!-- Tabler Icons & Google Fonts -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* Same styles as before */
+    :root {
+      --bg: #f6f8fc;
+      --bg-card: #ffffff;
+      --text: #1a1a2e;
+      --text-secondary: #4b5563;
+      --text-muted: #6b7280;
+      --border: #e5e7eb;
+      --shadow: 0 1px 3px rgba(0,0,0,0.06);
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --primary-bg: #eef2ff;
+      --input-bg: #ffffff;
+      --input-border: #d1d5db;
+      --table-header: #f9fafb;
+      --table-border: #f3f4f6;
+      --nav-bg: #ffffff;
+      --subnav-bg: #f3f4f6;
+      --subnav-active: #ffffff;
+      --badge-bg: #eef2ff;
+      --badge-text: #4f46e5;
+      --stat-bg: #ffffff;
+    }
+    [data-theme="dark"] {
+      --bg: #0f0f1a;
+      --bg-card: #1a1a2e;
+      --text: #e0e0e0;
+      --text-secondary: #b0b0c0;
+      --text-muted: #8a8a9a;
+      --border: #2a2a3e;
+      --shadow: 0 1px 3px rgba(0,0,0,0.4);
+      --primary: #818cf8;
+      --primary-hover: #6366f1;
+      --primary-bg: #2d2a4e;
+      --input-bg: #1a1a2e;
+      --input-border: #3a3a5a;
+      --table-header: #25253a;
+      --table-border: #2a2a3e;
+      --nav-bg: #1a1a2e;
+      --subnav-bg: #2a2a3e;
+      --subnav-active: #1a1a2e;
+      --badge-bg: #2d2a4e;
+      --badge-text: #818cf8;
+      --stat-bg: #1a1a2e;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 20px;
+      transition: background 0.3s, color 0.3s;
+    }
+    #root { max-width: 1100px; margin:0 auto; }
+
+    .top-nav {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      background: var(--nav-bg); padding: 12px 20px; border-radius: 12px;
+      box-shadow: var(--shadow); margin-bottom: 24px; border: 1px solid var(--border);
+      align-items: center; transition: background 0.3s, border 0.3s;
+    }
+    .top-nav .brand {
+      font-weight: 700; font-size: 18px; margin-right: 20px;
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .top-nav button {
+      padding: 6px 16px; border-radius: 8px; border: none;
+      background: transparent; color: var(--text-secondary);
+      font-weight: 500; font-size: 14px; cursor: pointer; transition: 0.2s;
+    }
+    .top-nav button:hover { background: var(--border); color: var(--text); }
+    .top-nav button.active { background: var(--primary); color: #fff; }
+    .top-nav .role-badge {
+      margin-left: auto; padding: 4px 14px; border-radius: 20px;
+      background: var(--badge-bg); color: var(--badge-text);
+      font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 6px;
+    }
+    .top-nav .role-badge i { font-size: 14px; }
+    .dark-toggle {
+      background: none; border: none; font-size: 20px;
+      color: var(--text-secondary); cursor: pointer;
+      padding: 4px 8px; border-radius: 8px; transition: 0.2s;
+    }
+    .dark-toggle:hover { background: var(--border); color: var(--text); }
+
+    .card { background: var(--bg-card); border-radius: 12px; padding: 24px; border:1px solid var(--border); margin-bottom:20px; box-shadow:var(--shadow); transition: background 0.3s, border 0.3s; }
+    .card-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+    .card-header h3 { font-size:18px; font-weight:600; color:var(--text); }
+    .btn {
+      padding:8px 18px; border-radius:8px; font-weight:600; border:none;
+      background:var(--primary); color:#fff; cursor:pointer; font-size:14px; transition:0.2s;
+    }
+    .btn:hover { background:var(--primary-hover); }
+    .btn-secondary { background:var(--subnav-bg); color:var(--text-secondary); }
+    .btn-secondary:hover { background:var(--border); color:var(--text); }
+    .btn-sm { padding:4px 14px; font-size:12px; }
+    .btn-success { background:#10b981; }
+    .btn-success:hover { background:#059669; }
+    .btn-outline { background:transparent; color:var(--primary); border:1px solid var(--primary); }
+    .btn-outline:hover { background:var(--primary-bg); }
+    .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+    .form-group { margin-bottom:16px; }
+    .form-group label { display:block; font-weight:600; font-size:13px; margin-bottom:4px; color:var(--text-secondary); }
+    .form-control {
+      width:100%; padding:8px 12px; border:1px solid var(--input-border); border-radius:8px;
+      font-size:14px; font-family:inherit; background:var(--input-bg); color:var(--text);
+      transition: background 0.3s, border 0.3s, color 0.3s;
+    }
+    .form-control:focus { outline:none; border-color:var(--primary); box-shadow:0 0 0 3px rgba(79,70,229,0.12); }
+    .form-grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .select-wrap { position:relative; }
+    .select-wrap select { appearance:none; width:100%; padding:8px 12px; border:1px solid var(--input-border); border-radius:8px; background:var(--input-bg); color:var(--text); font-size:14px; font-family:inherit; }
+    .select-wrap i { position:absolute; right:12px; top:50%; transform:translateY(-50%); color:var(--text-muted); pointer-events:none; }
+
+    .table-wrap { overflow-x:auto; }
+    table { width:100%; border-collapse:collapse; font-size:14px; color:var(--text); }
+    th, td { padding:10px 12px; text-align:left; border-bottom:1px solid var(--table-border); }
+    th { background:var(--table-header); font-weight:600; color:var(--text-secondary); }
+
+    .alert { padding:12px 16px; border-radius:8px; font-weight:500; margin-bottom:12px; }
+    .alert-success { background:#d1fae5; color:#065f46; }
+    .alert-info { background:#e0f2fe; color:#075985; }
+
+    .flex-between { display:flex; justify-content:space-between; align-items:center; }
+    .mt-4 { margin-top:16px; }
+    .mb-4 { margin-bottom:16px; }
+    .text-muted { color:var(--text-muted); }
+    .text-center { text-align:center; }
+
+    .rank-badge {
+      display:inline-flex; align-items:center; gap:4px;
+      padding:2px 10px; border-radius:20px;
+      background:var(--primary-bg); color:var(--badge-text);
+      font-size:12px; font-weight:600;
+    }
+    .rank-badge.top { background:rgba(34,197,94,0.12); color:#4ADE80; border:1px solid rgba(34,197,94,0.2); }
+    .match-bar {
+      height:6px; border-radius:3px; background:var(--border); margin-top:4px;
+    }
+    .match-bar .fill {
+      height:100%; border-radius:3px; background:var(--primary);
+      transition:width 0.4s;
+    }
+    .match-bar .fill.high { background:#4ADE80; }
+    .match-bar .fill.mid { background:#FCD34D; }
+    .match-bar .fill.low { background:#F87171; }
+
+    .hub-drive-selector {
+      display:flex; gap:12px; flex-wrap:wrap; margin-bottom:20px;
+    }
+    .hub-drive-selector button {
+      padding:6px 16px; border-radius:8px; border:1px solid var(--border);
+      background:var(--bg-card); color:var(--text-secondary);
+      cursor:pointer; transition:0.2s; font-size:14px; font-weight:500;
+    }
+    .hub-drive-selector button.active {
+      background:var(--primary); color:#fff; border-color:var(--primary);
+    }
+    .hub-drive-selector button:hover:not(.active) { border-color:var(--primary); color:var(--text); }
+
+    .topic-chip {
+      display:inline-block; padding:2px 10px; border-radius:20px;
+      background:var(--primary-bg); color:var(--badge-text);
+      font-size:12px; margin-right:4px; margin-bottom:4px;
+    }
+
+    /* File upload zone */
+    .upload-zone {
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      padding: 40px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      background: var(--input-bg);
+    }
+    .upload-zone:hover { border-color: var(--primary); }
+    .upload-zone.dragging { border-color: var(--primary); background: var(--primary-bg); }
+    .upload-zone i { font-size: 48px; color: var(--text-muted); margin-bottom: 12px; display:block; }
+    .upload-zone .hint { font-size: 14px; color: var(--text-muted); }
+    .upload-zone .sub-hint { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+    .file-info {
+      display:flex; align-items:center; gap:10px;
+      padding:10px 14px; background:var(--bg); border-radius:8px; margin-top:12px;
+      border:1px solid var(--border);
+    }
+    .file-info .name { flex:1; font-weight:500; }
+    .file-info .size { color:var(--text-muted); font-size:13px; }
+    .file-info .remove { cursor:pointer; color:var(--text-muted); }
+    .file-info .remove:hover { color:#ef4444; }
+
+    @media (max-width:768px) {
+      .grid-2 { grid-template-columns:1fr; }
+      .form-grid-2 { grid-template-columns:1fr; }
+      .top-nav { flex-direction:column; align-items:stretch; }
+      .top-nav .brand { margin-right:0; text-align:center; }
+      .top-nav .role-badge { margin-left:0; text-align:center; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="root">
+  <div style="text-align:center;padding:80px;color:#818CF8;font-size:18px;">
+    <i class="ti ti-loader-2" style="font-size:40px;display:block;margin-bottom:16px;animation:spin 1s linear infinite;"></i>
+    Loading...
+  </div>
+</div>
+
+<style>
+  @keyframes spin { 100% { transform:rotate(360deg); } }
+</style>
+
+<script>
+  // Error handler
+  window.onerror = function(message, source, lineno, colno, error) {
+    document.getElementById('root').innerHTML =
+      `<div style="background:#1E293B;border:1px solid #ef4444;border-radius:12px;padding:32px;color:#F87171;max-width:600px;margin:40px auto;">
+        <h2 style="color:#ef4444;margin-bottom:12px;">❌ Error</h2>
+        <p>${message}</p>
+        <pre style="background:#0F172A;padding:16px;border-radius:8px;overflow:auto;font-size:13px;border:1px solid #334155;color:#94A3B8;margin-top:12px;">${error?.stack || ''}</pre>
+       </div>`;
+    console.error('Global error:', error);
+  };
+
+  // Wait for React
+  function checkDeps() {
+    if (typeof React === 'undefined' || typeof ReactDOM === 'undefined') {
+      document.getElementById('root').innerHTML =
+        `<div style="background:#1E293B;border:1px solid #ef4444;border-radius:12px;padding:32px;color:#F87171;max-width:600px;margin:40px auto;">
+          <h2 style="color:#ef4444;">❌ React not loaded</h2><p>Check internet connection.</p>
+         </div>`;
+      return false;
+    }
+    return true;
+  }
+
+  function waitForReact(callback, attempts) {
+    attempts = attempts || 0;
+    if (attempts > 15) {
+      document.getElementById('root').innerHTML =
+        `<div style="background:#1E293B;border:1px solid #ef4444;border-radius:12px;padding:32px;color:#F87171;max-width:600px;margin:40px auto;">
+          <h2 style="color:#ef4444;">❌ Timeout</h2><p>React did not load.</p>
+         </div>`;
+      return;
+    }
+    if (checkDeps()) {
+      callback();
+    } else {
+      setTimeout(function() { waitForReact(callback, attempts + 1); }, 200);
+    }
+  }
+
+  // Main App
+  function startApp() {
+    try {
+      const { createElement: h, useState, useEffect, useRef, useCallback } = React;
+      const { render } = ReactDOM;
+
+      // ---- Mock Data ----
+      const initialDrives = [
+        { id: 'd1', title: 'Full Stack Developer', domain: 'Tech', priorityTopics: ['React', 'Node.js', 'PostgreSQL', 'MongoDB', 'Docker'] },
+        { id: 'd2', title: 'ML Engineer', domain: 'ML', priorityTopics: ['Python', 'TensorFlow', 'PyTorch', 'Scikit-learn'] },
+        { id: 'd3', title: 'UI/UX Designer', domain: 'Design', priorityTopics: ['Figma', 'Adobe XD', 'Design Systems', 'Prototyping'] },
+        { id: 'd4', title: 'Finance Analyst', domain: 'Finance', priorityTopics: ['Excel', 'Financial Modeling', 'Data Analysis', 'SQL'] },
+      ];
+
+      const initialApplicants = [
+        { id: 'a1', name: 'Arjun Sharma', email: 'arjun@example.com', year: '3rd', branch: 'CSE', driveId: 'd1', topics: ['React', 'Node.js', 'PostgreSQL', 'AWS'] },
+        { id: 'a2', name: 'Neha Patel', email: 'neha@example.com', year: '4th', branch: 'CSE', driveId: 'd1', topics: ['React', 'JavaScript', 'HTML', 'CSS'] },
+        { id: 'a3', name: 'Rahul Singh', email: 'rahul@example.com', year: '3rd', branch: 'ECE', driveId: 'd1', topics: ['Python', 'Django', 'SQL'] },
+        { id: 'a4', name: 'Sneha Reddy', email: 'sneha@example.com', year: '2nd', branch: 'Design', driveId: 'd3', topics: ['Figma', 'Adobe XD', 'Sketch'] },
+        { id: 'a5', name: 'Vikram Joshi', email: 'vikram@example.com', year: '4th', branch: 'CSE', driveId: 'd2', topics: ['Python', 'TensorFlow', 'Keras'] },
+      ];
+
+      // ---- Ranking Engine ----
+      function computeCVScore(candidate, drive) {
+        if (!drive || !drive.priorityTopics || drive.priorityTopics.length === 0) return 0;
+        const topics = drive.priorityTopics.map(t => t.toLowerCase().trim());
+        const cvTopics = candidate.topics.map(t => t.toLowerCase().trim());
+        const matches = topics.filter(t => cvTopics.some(ct => ct.includes(t) || t.includes(ct)));
+        return Math.round((matches.length / topics.length) * 100);
+      }
+
+      // ---- App ----
+      const App = () => {
+        const [drives, setDrives] = useState(initialDrives);
+        const [applicants, setApplicants] = useState(initialApplicants);
+        const [selectedDriveId, setSelectedDriveId] = useState('d1');
+        const [viewMode, setViewMode] = useState('applicant');
+
+        // Form state
+        const [formName, setFormName] = useState('');
+        const [formEmail, setFormEmail] = useState('');
+        const [formYear, setFormYear] = useState('3rd');
+        const [formBranch, setFormBranch] = useState('CSE');
+        const [formTopics, setFormTopics] = useState('');
+        const [formDriveId, setFormDriveId] = useState('d1');
+        const [submitted, setSubmitted] = useState(false);
+
+        // File upload state
+        const [uploadedFile, setUploadedFile] = useState(null);
+        const [extractedTopics, setExtractedTopics] = useState('');
+        const fileInputRef = useRef(null);
+
+        // Recruiter edit
+        const [editingDriveId, setEditingDriveId] = useState(null);
+        const [editTopics, setEditTopics] = useState('');
+
+        // ---- Computed ----
+        const getDrive = (id) => drives.find(d => d.id === id);
+        const getApplicantsForDrive = (driveId) => {
+          return applicants
+            .filter(a => a.driveId === driveId)
+            .map(a => {
+              const drive = getDrive(driveId);
+              const score = drive ? computeCVScore(a, drive) : 0;
+              return { ...a, score };
+            })
+            .sort((a, b) => b.score - a.score);
+        };
+
+        // ---- File handling ----
+        const handleFileDrop = useCallback((file) => {
+          if (!file) return;
+          // Simulate extraction: use file name to generate topics
+          const name = file.name.replace(/\.[^.]+$/, ''); // remove extension
+          const words = name.split(/[\s\-_]+/).filter(w => w.length > 2);
+          // If too few words, add default skills
+          let topics = words.slice(0, 5);
+          if (topics.length === 0) topics = ['React', 'Node.js', 'Python', 'Java', 'SQL'];
+          // Add some common tech skills based on file type
+          if (file.type.includes('pdf')) topics.push('PDF');
+          if (file.type.includes('image')) topics.push('Design', 'Photoshop');
+          const topicStr = topics.join(', ');
+          setExtractedTopics(topicStr);
+          setFormTopics(topicStr); // auto-fill the topics textarea
+          setUploadedFile(file);
+        }, []);
+
+        const handleUploadClick = () => {
+          fileInputRef.current?.click();
+        };
+
+        const handleFileChange = (e) => {
+          const file = e.target.files?.[0];
+          if (file) handleFileDrop(file);
+          e.target.value = ''; // allow re-selecting same file
+        };
+
+        const handleRemoveFile = () => {
+          setUploadedFile(null);
+          setExtractedTopics('');
+          setFormTopics('');
+        };
+
+        // ---- Submit ----
+        const handleSubmit = () => {
+          if (!formName) {
+            alert('Please enter your name.');
+            return;
+          }
+          if (!formTopics.trim()) {
+            alert('Please enter topics (or upload a file to extract).');
+            return;
+          }
+          const topicsArr = formTopics.split(',').map(s => s.trim()).filter(Boolean);
+          if (topicsArr.length === 0) {
+            alert('Please enter at least one topic.');
+            return;
+          }
+          const newApplicant = {
+            id: 'a' + Date.now(),
+            name: formName,
+            email: formEmail || `${formName.toLowerCase().replace(/\s/g,'.')}@example.com`,
+            year: formYear,
+            branch: formBranch,
+            driveId: formDriveId,
+            topics: topicsArr
+          };
+          setApplicants(prev => [...prev, newApplicant]);
+          setSubmitted(true);
+          setFormName('');
+          setFormEmail('');
+          setFormTopics('');
+          setExtractedTopics('');
+          setUploadedFile(null);
+          setSelectedDriveId(formDriveId);
+          setTimeout(() => setSubmitted(false), 4000);
+        };
+
+        // ---- Recruiter ----
+        const handleSaveTopics = (driveId) => {
+          const topicsArr = editTopics.split(',').map(s => s.trim()).filter(Boolean);
+          if (topicsArr.length === 0) {
+            alert('Please enter at least one topic.');
+            return;
+          }
+          const updated = drives.map(d => {
+            if (d.id === driveId) return { ...d, priorityTopics: topicsArr };
+            return d;
+          });
+          setDrives(updated);
+          setEditingDriveId(null);
+          setEditTopics('');
+        };
+
+        // ---- Render components ----
+        const FormSection = () => {
+          return h('div', { className: 'card' },
+            h('div', { className: 'card-header' },
+              h('h3', null, '📄 Upload Resume & Submit'),
+              h('span', { className: 'text-muted' }, 'PDF, PNG, JPG')
+            ),
+            // File upload zone
+            h('div', { className: 'upload-zone', onClick: handleUploadClick,
+              onDragOver: (e) => { e.preventDefault(); e.currentTarget.classList.add('dragging'); },
+              onDragLeave: (e) => { e.currentTarget.classList.remove('dragging'); },
+              onDrop: (e) => { e.preventDefault(); e.currentTarget.classList.remove('dragging'); const file = e.dataTransfer.files[0]; if (file) handleFileDrop(file); }
+            },
+              h('i', { className: 'ti ti-cloud-upload' }),
+              h('div', { className: 'hint' }, 'Click or drag & drop your resume'),
+              h('div', { className: 'sub-hint' }, 'Supported: PDF, PNG, JPG, DOCX (max 5MB)')
+            ),
+            h('input', { type: 'file', ref: fileInputRef, style: { display:'none' }, onChange: handleFileChange, accept: '.pdf,.png,.jpg,.jpeg,.docx' }),
+
+            // File info
+            uploadedFile && h('div', { className: 'file-info' },
+              h('i', { className: 'ti ti-file' }),
+              h('span', { className: 'name' }, uploadedFile.name),
+              h('span', { className: 'size' }, (uploadedFile.size / 1024).toFixed(1), ' KB'),
+              h('span', { className: 'remove', onClick: (e) => { e.stopPropagation(); handleRemoveFile(); } }, h('i', { className: 'ti ti-x' }))
+            ),
+
+            // Extracted topics (editable)
+            h('div', { className: 'form-group', style: { marginTop:'16px' } },
+              h('label', null, 'Extracted Topics (edit if needed)'),
+              h('input', { className: 'form-control', placeholder: 'Comma separated skills', value: formTopics, onChange: e => setFormTopics(e.target.value) })
+            ),
+
+            h('div', { className: 'form-grid-2' },
+              h('div', { className: 'form-group' },
+                h('label', null, 'Full Name'),
+                h('input', { className: 'form-control', placeholder: 'Your name', value: formName, onChange: e => setFormName(e.target.value) })
+              ),
+              h('div', { className: 'form-group' },
+                h('label', null, 'Email (optional)'),
+                h('input', { className: 'form-control', placeholder: 'email@example.com', value: formEmail, onChange: e => setFormEmail(e.target.value) })
+              )
+            ),
+            h('div', { className: 'form-grid-2' },
+              h('div', { className: 'form-group' },
+                h('label', null, 'Year'),
+                h('div', { className: 'select-wrap' },
+                  h('select', { className: 'form-control', value: formYear, onChange: e => setFormYear(e.target.value) },
+                    ['1st','2nd','3rd','4th'].map(y => h('option', { key: y, value: y+' Year' }, y+' Year'))
+                  ),
+                  h('i', { className: 'ti ti-chevron-down' })
+                )
+              ),
+              h('div', { className: 'form-group' },
+                h('label', null, 'Branch'),
+                h('div', { className: 'select-wrap' },
+                  h('select', { className: 'form-control', value: formBranch, onChange: e => setFormBranch(e.target.value) },
+                    ['CSE','ECE','ME','CE','EE'].map(b => h('option', { key: b, value: b }, b))
+                  ),
+                  h('i', { className: 'ti ti-chevron-down' })
+                )
+              )
+            ),
+            h('div', { className: 'form-group' },
+              h('label', null, 'Select Drive'),
+              h('div', { className: 'select-wrap' },
+                h('select', { className: 'form-control', value: formDriveId, onChange: e => setFormDriveId(e.target.value) },
+                  drives.map(d => h('option', { key: d.id, value: d.id }, d.title, ' (', d.domain, ')'))
+                ),
+                h('i', { className: 'ti ti-chevron-down' })
+              )
+            ),
+            h('button', { className: 'btn', onClick: handleSubmit }, h('i', { className: 'ti ti-send' }), ' Submit & See Ranking'),
+            submitted && h('div', { className: 'alert alert-success mt-4' }, h('i', { className: 'ti ti-circle-check' }), ' Submitted! Your rank appears below.')
+          );
+        };
+
+        const RankingTable = ({ driveId }) => {
+          const drive = getDrive(driveId);
+          const ranked = getApplicantsForDrive(driveId);
+          return h('div', { className: 'card' },
+            h('div', { className: 'card-header' },
+              h('h3', null, drive?.title, ' — Priority Topics: ', drive?.priorityTopics?.join(', ')),
+              h('span', { className: 'text-muted' }, ranked.length, ' applicants')
+            ),
+            ranked.length === 0 ?
+              h('div', { className: 'text-muted text-center', style: { padding:'20px' } }, 'No applicants yet. Be the first to submit!') :
+              h('div', { className: 'table-wrap' },
+                h('table', null,
+                  h('thead', null,
+                    h('tr', null,
+                      h('th', null, 'Rank'),
+                      h('th', null, 'Name'),
+                      h('th', null, 'Year/Branch'),
+                      h('th', null, 'Match'),
+                      h('th', null, 'Topics')
+                    )
+                  ),
+                  h('tbody', null,
+                    ranked.map((c, idx) => {
+                      const rank = idx + 1;
+                      const isTop = rank <= 3;
+                      const score = c.score || 0;
+                      const barClass = score >= 70 ? 'high' : score >= 50 ? 'mid' : 'low';
+                      return h('tr', { key: c.id, style: isTop ? { background:'var(--primary-bg)' } : {} },
+                        h('td', null,
+                          h('span', { className: `rank-badge ${isTop ? 'top' : ''}` },
+                            isTop ? h('i', { className: 'ti ti-trophy' }) : h('i', { className: 'ti ti-hash' }),
+                            ' ', rank
+                          )
+                        ),
+                        h('td', null, h('strong', null, c.name)),
+                        h('td', null, c.year, ' · ', c.branch),
+                        h('td', null,
+                          h('div', null,
+                            h('span', { style: { fontWeight:600, color: score>=70 ? '#4ADE80' : score>=50 ? '#FCD34D' : '#F87171' } }, score, '%'),
+                            h('div', { className: 'match-bar' },
+                              h('div', { className: `fill ${barClass}`, style: { width: score + '%' } })
+                            )
+                          )
+                        ),
+                        h('td', null, c.topics.slice(0,3).join(', '), c.topics.length > 3 ? ' …' : '')
+                      );
+                    })
+                  )
+                )
+              )
+          );
+        };
+
+        const RecruiterPanel = () => {
+          return h('div', { className: 'card' },
+            h('div', { className: 'card-header' },
+              h('h3', null, '⚙️ Recruiter – Edit Priority Topics'),
+              h('span', { className: 'text-muted' }, 'Changes recalc scores instantly')
+            ),
+            drives.map(d => {
+              const isEditing = editingDriveId === d.id;
+              return h('div', { key: d.id, style: { borderBottom:'1px solid var(--border)', padding:'12px 0' } },
+                h('div', { className: 'flex-between' },
+                  h('div', null,
+                    h('strong', null, d.title),
+                    h('span', { className: 'text-muted', style: { marginLeft:'8px' } }, d.domain)
+                  ),
+                  h('button', { className: 'btn btn-secondary btn-sm', onClick: () => {
+                    if (isEditing) { setEditingDriveId(null); setEditTopics(''); }
+                    else { setEditingDriveId(d.id); setEditTopics(d.priorityTopics.join(', ')); }
+                  } }, isEditing ? 'Cancel' : 'Edit')
+                ),
+                h('div', { style: { marginTop:'6px' } },
+                  isEditing ?
+                    h('div', { className: 'topic-edit', style: { display:'flex', gap:'8px', flexWrap:'wrap', alignItems:'center' } },
+                      h('input', { className: 'form-control', style: { flex:1, minWidth:'200px' }, value: editTopics, onChange: e => setEditTopics(e.target.value), placeholder: 'React, Node.js, SQL' }),
+                      h('button', { className: 'btn btn-sm', onClick: () => handleSaveTopics(d.id) }, 'Save'),
+                      h('button', { className: 'btn btn-secondary btn-sm', onClick: () => { setEditingDriveId(null); setEditTopics(''); } }, 'Cancel')
+                    ) :
+                    h('div', null,
+                      d.priorityTopics.map(t => h('span', { key: t, className: 'topic-chip' }, t))
+                    )
+                )
+              );
+            })
+          );
+        };
+
+        // ---- Main layout ----
+        return h('div', null,
+          h('nav', { className: 'top-nav' },
+            h('span', { className: 'brand' }, h('i', { className: 'ti ti-bolt' }), ' Resume Ranker'),
+            h('button', { className: viewMode === 'applicant' ? 'active' : '', onClick: () => setViewMode('applicant') }, 'Applicant View'),
+            h('button', { className: viewMode === 'recruiter' ? 'active' : '', onClick: () => setViewMode('recruiter') }, 'Recruiter'),
+            h('span', { className: 'role-badge' },
+              h('i', { className: viewMode === 'recruiter' ? 'ti ti-shield' : 'ti ti-user' }),
+              ' ', viewMode === 'recruiter' ? 'Recruiter' : 'Applicant'
+            ),
+            h('button', { className: 'dark-toggle', onClick: () => {
+              const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+              document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            }, title: 'Toggle dark mode' },
+              h('i', { className: document.documentElement.getAttribute('data-theme') === 'dark' ? 'ti ti-sun' : 'ti ti-moon' })
+            )
+          ),
+          viewMode === 'recruiter' ?
+            h(RecruiterPanel) :
+            h('div', null,
+              h('div', { className: 'grid-2' },
+                h(FormSection),
+                h('div', null,
+                  h('div', { className: 'card' },
+                    h('div', { className: 'card-header' },
+                      h('h3', null, '🏆 Ranking Hub'),
+                      h('span', { className: 'text-muted' }, 'Select a drive')
+                    ),
+                    h('div', { className: 'hub-drive-selector' },
+                      drives.map(d =>
+                        h('button', {
+                          key: d.id,
+                          className: selectedDriveId === d.id ? 'active' : '',
+                          onClick: () => setSelectedDriveId(d.id)
+                        }, d.title, ' (', getApplicantsForDrive(d.id).length, ')')
+                      )
+                    )
+                  ),
+                  h(RankingTable, { driveId: selectedDriveId })
+                )
+              )
+            )
+        );
+      };
+
+      // ---- Render ----
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(h(App));
+      console.log('✅ App rendered');
+
+    } catch (err) {
+      console.error('❌ Fatal error:', err);
+      document.getElementById('root').innerHTML =
+        `<div style="background:#1E293B;border:1px solid #ef4444;border-radius:12px;padding:32px;color:#F87171;max-width:600px;margin:40px auto;">
+          <h2 style="color:#ef4444;margin-bottom:12px;">❌ Fatal Error</h2>
+          <p>${err.message}</p>
+          <pre style="background:#0F172A;padding:16px;border-radius:8px;overflow:auto;font-size:13px;border:1px solid #334155;color:#94A3B8;margin-top:12px;">${err.stack}</pre>
+         </div>`;
+    }
+  }
+
+  // ---- Start ----
+  waitForReact(startApp);
+</script>
+</body>
+</html>
