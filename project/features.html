@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RecruitIQ – AI Recruitment Pipeline (Dark Mode)</title>
+
+  <!-- React + ReactDOM -->
+  <script crossorigin src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    /* ===== CSS Variables ===== */
+    :root {
+      --bg: #f6f8fc;
+      --bg-card: #ffffff;
+      --text: #1a1a2e;
+      --text-secondary: #4b5563;
+      --text-muted: #6b7280;
+      --border: #e5e7eb;
+      --shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --primary-bg: #eef2ff;
+      --input-bg: #ffffff;
+      --input-border: #d1d5db;
+      --table-header: #f9fafb;
+      --table-border: #f3f4f6;
+      --nav-bg: #ffffff;
+      --subnav-bg: #f3f4f6;
+      --subnav-active: #ffffff;
+      --badge-bg: #eef2ff;
+      --badge-text: #4f46e5;
+      --stat-bg: #ffffff;
+    }
+
+    /* Dark theme */
+    [data-theme="dark"] {
+      --bg: #0f0f1a;
+      --bg-card: #1a1a2e;
+      --text: #e0e0e0;
+      --text-secondary: #b0b0c0;
+      --text-muted: #8a8a9a;
+      --border: #2a2a3e;
+      --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+      --primary: #818cf8;
+      --primary-hover: #6366f1;
+      --primary-bg: #2d2a4e;
+      --input-bg: #1a1a2e;
+      --input-border: #3a3a5a;
+      --table-header: #25253a;
+      --table-border: #2a2a3e;
+      --nav-bg: #1a1a2e;
+      --subnav-bg: #2a2a3e;
+      --subnav-active: #1a1a2e;
+      --badge-bg: #2d2a4e;
+      --badge-text: #818cf8;
+      --stat-bg: #1a1a2e;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 20px;
+      transition: background 0.3s, color 0.3s;
+    }
+    #root {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    /* ---- Top Navigation ---- */
+    .top-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      background: var(--nav-bg);
+      padding: 12px 20px;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+      border: 1px solid var(--border);
+      align-items: center;
+      transition: background 0.3s, border 0.3s;
+    }
+    .top-nav .brand {
+      font-weight: 700;
+      font-size: 18px;
+      margin-right: 20px;
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .top-nav button {
+      padding: 6px 16px;
+      border-radius: 8px;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-weight: 500;
+      font-size: 14px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .top-nav button:hover {
+      background: var(--border);
+      color: var(--text);
+    }
+    .top-nav button.active {
+      background: var(--primary);
+      color: #fff;
+    }
+    .top-nav .role-badge {
+      margin-left: auto;
+      padding: 4px 14px;
+      border-radius: 20px;
+      background: var(--badge-bg);
+      color: var(--badge-text);
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .top-nav .role-badge i {
+      margin-right: 6px;
+    }
+    /* Dark mode toggle */
+    .dark-toggle {
+      background: none;
+      border: none;
+      font-size: 20px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 8px;
+      transition: 0.2s;
+    }
+    .dark-toggle:hover {
+      background: var(--border);
+      color: var(--text);
+    }
+
+    /* ---- Shared styles (with variables) ---- */
+    .card {
+      background: var(--bg-card);
+      border-radius: 12px;
+      padding: 24px;
+      border: 1px solid var(--border);
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+      transition: background 0.3s, border 0.3s, box-shadow 0.3s;
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .card-header h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .btn {
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      border: none;
+      background: var(--primary);
+      color: #fff;
+      cursor: pointer;
+      font-size: 14px;
+      transition: 0.2s;
+    }
+    .btn:hover {
+      background: var(--primary-hover);
+    }
+    .btn-secondary {
+      background: var(--subnav-bg);
+      color: var(--text-secondary);
+    }
+    .btn-secondary:hover {
+      background: var(--border);
+      color: var(--text);
+    }
+    .btn-sm {
+      padding: 4px 14px;
+      font-size: 12px;
+    }
+    .btn-success {
+      background: #10b981;
+    }
+    .btn-success:hover {
+      background: #059669;
+    }
+    .btn-danger {
+      background: #ef4444;
+    }
+    .btn-danger:hover {
+      background: #dc2626;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+    }
+    .grid-4 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 20px;
+    }
+    .stat-card {
+      background: var(--stat-bg);
+      border-radius: 12px;
+      padding: 16px 20px;
+      border: 1px solid var(--border);
+      transition: background 0.3s, border 0.3s;
+    }
+    .stat-card .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .stat-card .stat-label {
+      color: var(--text-muted);
+      font-size: 13px;
+      margin-top: 2px;
+    }
+    .stat-card .stat-icon {
+      float: right;
+      font-size: 24px;
+      color: var(--text-muted);
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      font-size: 13px;
+      margin-bottom: 4px;
+      color: var(--text-secondary);
+    }
+    .form-control {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid var(--input-border);
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+      background: var(--input-bg);
+      color: var(--text);
+      transition: background 0.3s, border 0.3s, color 0.3s;
+    }
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .table-wrap {
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      color: var(--text);
+    }
+    th, td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--table-border);
+    }
+    th {
+      background: var(--table-header);
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+    .table-status {
+      padding: 2px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      display: inline-block;
+    }
+    .table-status.selected {
+      background: #d1fae5;
+      color: #065f46;
+    }
+    .table-status.waitlisted {
+      background: #fef3c7;
+      color: #92400e;
+    }
+    .table-status.rejected {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+    .table-status.pending {
+      background: #e0f2fe;
+      color: #075985;
+    }
+    .table-status.ai-done {
+      background: #e0e7ff;
+      color: #3730a3;
+    }
+    .progress-bar {
+      height: 6px;
+      background: var(--border);
+      border-radius: 4px;
+      margin-top: 4px;
+    }
+    .progress-bar .fill {
+      height: 100%;
+      border-radius: 4px;
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      transition: width 0.5s;
+    }
+    .org-hub-hero {
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      color: #fff;
+      padding: 32px 40px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+    }
+    .org-hub-hero h1 {
+      font-size: 28px;
+    }
+    .org-hub-hero p {
+      opacity: 0.9;
+      margin: 6px 0 12px;
+    }
+    .org-hub-hero .org-meta {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .org-hub-hero .org-meta span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      opacity: 0.9;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-muted);
+    }
+    .empty-state i {
+      font-size: 40px;
+      color: var(--border);
+      margin-bottom: 8px;
+    }
+    .alert {
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+    .alert-info {
+      background: #e0f2fe;
+      color: #075985;
+    }
+    .alert-success {
+      background: #d1fae5;
+      color: #065f46;
+    }
+    .alert-warning {
+      background: #fef3c7;
+      color: #92400e;
+    }
+    .interviewer-candidate-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 8px;
+      background: var(--bg-card);
+      cursor: pointer;
+      transition: 0.2s;
+      text-decoration: none;
+      color: var(--text);
+    }
+    .interviewer-candidate-card:hover {
+      border-color: var(--primary);
+      box-shadow: 0 2px 8px rgba(79, 70, 229, 0.12);
+    }
+    .interviewer-candidate-card .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+    .interviewer-candidate-card .info {
+      flex: 1;
+    }
+    .interviewer-candidate-card .info .name {
+      font-weight: 600;
+      color: var(--text);
+    }
+    .interviewer-candidate-card .info .detail {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .interview-question {
+      background: var(--subnav-bg);
+      padding: 16px 20px;
+      border-left: 4px solid var(--primary);
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+    .interview-question .q-text {
+      font-weight: 500;
+      margin: 6px 0 8px;
+      color: var(--text);
+    }
+    .interview-question textarea {
+      width: 100%;
+      min-height: 80px;
+      padding: 8px 12px;
+      border: 1px solid var(--input-border);
+      border-radius: 6px;
+      font-family: inherit;
+      background: var(--input-bg);
+      color: var(--text);
+      resize: vertical;
+      transition: background 0.3s, border 0.3s, color 0.3s;
+    }
+    .flex-between {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .mt-4 { margin-top: 16px; }
+    .mb-4 { margin-bottom: 16px; }
+    .text-muted { color: var(--text-muted); }
+    .text-center { text-align: center; }
+    .gap-2 { gap: 8px; }
+    .gap-4 { gap: 16px; }
+
+    /* Sub-nav */
+    .sub-nav {
+      display: flex;
+      gap: 4px;
+      background: var(--subnav-bg);
+      padding: 4px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      transition: background 0.3s;
+    }
+    .sub-nav button {
+      padding: 6px 18px;
+      border-radius: 8px;
+      border: none;
+      background: transparent;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: 0.2s;
+      font-size: 14px;
+    }
+    .sub-nav button.active {
+      background: var(--subnav-active);
+      color: var(--text);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .sub-nav button:hover:not(.active) {
+      background: var(--border);
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+    .modal {
+      background: var(--bg-card);
+      padding: 32px;
+      border-radius: 12px;
+      max-width: 500px;
+      width: 100%;
+      border: 1px solid var(--border);
+      transition: background 0.3s, border 0.3s;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .grid-2, .grid-3, .grid-4 {
+        grid-template-columns: 1fr;
+      }
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+      .top-nav {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .top-nav .brand {
+        margin-right: 0;
+        text-align: center;
+      }
+      .top-nav .role-badge {
+        margin-left: 0;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div id="root"></div>
+
+<script>
+  const { createElement: h, useState, useEffect, useContext, createContext, useMemo, Fragment } = React;
+  const { render } = ReactDOM;
+
+  // ============================================================
+  //  CONTEXT & MOCK DATA
+  // ============================================================
+  const AuthContext = createContext(null);
+
+  const AuthProvider = ({ children }) => {
+    const [user, setUser] = useState({
+      id: 'usr_001',
+      name: 'Arjun Sharma',
+      email: 'arjun.sharma@example.com',
+      role: 'admin',
+      avatar: 'AS',
+      org: 'CodeCell',
+      orgId: 'org_001'
+    });
+
+    const login = (role) => {
+      const names = {
+        admin: { name: 'Admin User', avatar: 'AU' },
+        interviewer: { name: 'Priya Mehta', avatar: 'PM' },
+        applicant: { name: 'Arjun Sharma', avatar: 'AS' }
+      };
+      setUser(prev => ({ ...prev, role, name: names[role].name, avatar: names[role].avatar }));
+    };
+
+    const logout = () => {
+      setUser({ id: '', name: '', email: '', role: 'applicant', avatar: '', org: '', orgId: '' });
+    };
+
+    return h(AuthContext.Provider, { value: { user, setUser, login, logout } }, children);
+  };
+
+  const useAuth = () => useContext(AuthContext);
+
+  // Mock data (same as before)
+  const MOCK_DRIVES = [
+    { id: 'd1', title: 'Full Stack Developer', org: 'CodeCell', description: 'React, Node, PostgreSQL',
+      deadline: '2026-07-10', applicants: 124, status: 'active' },
+    { id: 'd2', title: 'Product Designer', org: 'CodeCell', description: 'UI/UX, Figma, Design Systems',
+      deadline: '2026-06-15', applicants: 87, status: 'active' },
+    { id: 'd3', title: 'DevOps Intern', org: 'CodeCell', description: 'Cloud, CI/CD, Kubernetes',
+      deadline: '2026-05-20', applicants: 56, status: 'closed' },
+  ];
+
+  const MOCK_CANDIDATES = [
+    { id: 'c1', name: 'Arjun Sharma', email: 'arjun@example.com', year: '3rd', branch: 'CSE', cgpa: 8.4,
+      scores: { cv: 82, ai: 76, pi: 88 }, finalScore: 82.4, status: 'selected', domain: 'Tech',
+      interviewer: 'Priya Mehta' },
+    { id: 'c2', name: 'Neha Patel', email: 'neha@example.com', year: '4th', branch: 'CSE', cgpa: 7.9,
+      scores: { cv: 74, ai: 81, pi: 72 }, finalScore: 75.7, status: 'waitlisted', domain: 'Tech',
+      interviewer: 'Priya Mehta' },
+    { id: 'c3', name: 'Rahul Singh', email: 'rahul@example.com', year: '3rd', branch: 'ECE', cgpa: 7.2,
+      scores: { cv: 61, ai: 54, pi: 63 }, finalScore: 59.4, status: 'rejected', domain: 'Tech',
+      interviewer: 'Amit Kumar' },
+    { id: 'c4', name: 'Sneha Reddy', email: 'sneha@example.com', year: '2nd', branch: 'Design', cgpa: 8.1,
+      scores: { cv: 88, ai: 92, pi: null }, finalScore: null, status: 'ai_done', domain: 'Design',
+      interviewer: null },
+  ];
+
+  const MOCK_AI_QUESTIONS = [
+    'Describe a React project you built. How did you manage state?',
+    'How would you design a real-time notification system?',
+    'Explain your approach to optimizing database queries.',
+  ];
+  const MOCK_AI_RESPONSES = [
+    'Used Redux Toolkit and React Query.',
+    'WebSockets with Redis pub/sub.',
+    'Proper indexing and query caching.',
+  ];
+
+  // ============================================================
+  //  PAGE COMPONENTS (same as before, but using CSS vars)
+  // ============================================================
+
+  // (All page components are identical to previous version – we copy them with no changes)
+  // To keep this answer concise, we reference the previous implementation.
+  // In the actual output below we will include them.
+
+  // ---- Org Hub ----
+  const OrgHub = () => {
+    return h('div', null,
+      h('div', { className: 'org-hub-hero' },
+        h('h1', null, h('i', { className: 'fas fa-building' }), ' CodeCell'),
+        h('p', null, 'Official tech club. Building products, hackathons, and community.'),
+        h('div', { className: 'org-meta' },
+          h('span', null, h('i', { className: 'fas fa-globe' }), ' codecell.campus.edu'),
+          h('span', null, h('i', { className: 'fab fa-github' }), ' @codecell'),
+          h('span', null, h('i', { className: 'fab fa-linkedin' }), ' /company/codecell')
+        )
+      ),
+      h('div', { className: 'grid-2' },
+        h('div', { className: 'card' },
+          h('div', { className: 'card-header' },
+            h('h3', null, h('i', { className: 'fas fa-bullhorn' }), ' Active Drives')
+          ),
+          MOCK_DRIVES.filter(d => d.status === 'active').map(d =>
+            h('div', { key: d.id, style: { padding: '8px 0', borderBottom: '1px solid var(--border)' } },
+              h('div', { style: { fontWeight: 600 } }, d.title),
+              h('div', { style: { fontSize: 13, color: 'var(--text-muted)' } }, d.org, ' · ', d.applicants,
+                ' applicants · Closes ', new Date(d.deadline).toLocaleDateString())
+            )
+          )
+        ),
+        h('div', { className: 'card' },
+          h('div', { className: 'card-header' },
+            h('h3', null, h('i', { className: 'fas fa-calendar' }), ' Upcoming Events')
+          ),
+          h('div', null,
+            h('div', { style: { padding: '6px 0' } }, 'Hackathon 2026 — Aug 15, 9:00 AM'),
+            h('div', { style: { padding: '6px 0' } }, 'CodeCell Open House — Aug 20, 4:00 PM')
+          )
+        )
+      ),
+      h('div', { className: 'card mt-4' },
+        h('div', { className: 'card-header' },
+          h('h3', null, h('i', { className: 'fas fa-clock-rotate-left' }), ' Past Drives')
+        ),
+        MOCK_DRIVES.filter(d => d.status === 'closed').map(d =>
+          h('div', { key: d.id, style: { padding: '8px 0', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between' } },
+            h('div', null,
+              h('div', { style: { fontWeight: 500 } }, d.title),
+              h('div', { style: { fontSize: 13, color: 'var(--text-muted)' } }, d.applicants, ' applicants · Closed')
+            ),
+            h('span', { className: 'table-status', style: { background: 'var(--border)', color: 'var(--text-muted)' } }, 'Closed')
+          )
+        )
+      )
+    );
+  };
+
+  // ---- Admin Pages ----
+  const AdminDashboard = () => {
+    const stats = [
+      { label: 'Active Drives', value: MOCK_DRIVES.filter(d => d.status === 'active').length, icon: 'fa-bullhorn' },
+      { label: 'Total Applicants', value: MOCK_CANDIDATES.length, icon: 'fa-users' },
+      { label: 'AI Screened', value: MOCK_CANDIDATES.filter(c => c.scores.ai !== null).length, icon: 'fa-robot' },
+      { label: 'PI Pending', value: MOCK_CANDIDATES.filter(c => c.scores.pi === null && c.status !== 'rejected').length, icon: 'fa-clock' },
+    ];
+    return h('div', null,
+      h('div', { className: 'grid-4' },
+        stats.map((s, i) =>
+          h('div', { className: 'stat-card', key: i },
+            h('div', { className: 'stat-icon' }, h('i', { className: `fas ${s.icon}` })),
+            h('div', { className: 'stat-value' }, s.value),
+            h('div', { className: 'stat-label' }, s.label)
+          )
+        )
+      ),
+      h('div', { className: 'grid-2 mt-4' },
+        h('div', { className: 'card' },
+          h('div', { className: 'card-header' },
+            h('h3', null, 'Recent Applicants'),
+            h('span', { className: 'text-muted' }, 'View all')
+          ),
+          h('div', { className: 'table-wrap' },
+            h('table', null,
+              h('thead', null,
+                h('tr', null, h('th', null, 'Name'), h('th', null, 'Domain'), h('th', null, 'CV Score'), h('th', null, 'Status'))
+              ),
+              h('tbody', null,
+                MOCK_CANDIDATES.slice(0, 4).map(c =>
+                  h('tr', { key: c.id },
+                    h('td', null, h('strong', null, c.name)),
+                    h('td', null, c.domain),
+                    h('td', null, c.scores.cv !== null ? `${c.scores.cv}%` : '—'),
+                    h('td', null, h('span', { className: `table-status ${c.status}` }, c.status.replace('_', ' ').toUpperCase()))
+                  )
+                )
+              )
+            )
+          )
+        ),
+        h('div', { className: 'card' },
+          h('div', { className: 'card-header' },
+            h('h3', null, 'Pipeline Overview')
+          ),
+          ['CV Screening', 'AI Screening', 'PI Round'].map((label, idx) => {
+            const key = ['cv', 'ai', 'pi'][idx];
+            const done = MOCK_CANDIDATES.filter(c => c.scores[key] !== null).length;
+            const total = MOCK_CANDIDATES.length;
+            return h('div', { key: idx, style: { padding: '8px 0' } },
+              h('div', { style: { display: 'flex', justifyContent: 'space-between', fontSize: 14 } },
+                h('span', null, label),
+                h('span', null, done, ' / ', total)
+              ),
+              h('div', { className: 'progress-bar' },
+                h('div', { className: 'fill', style: { width: `${(done/total)*100}%` } })
+              )
+            );
+          })
+        )
+      )
+    );
+  };
+
+  const OrgSetup = () => {
+    const [org, setOrg] = useState({
+      name: 'CodeCell',
+      description: 'Official tech club. Building products, hackathons, and community.',
+      domains: ['Tech', 'Design', 'Marketing']
+    });
+    return h('div', { className: 'card' },
+      h('div', { className: 'card-header' },
+        h('h3', null, h('i', { className: 'fas fa-building' }), ' Organization Profile'),
+        h('button', { className: 'btn btn-sm' }, h('i', { className: 'fas fa-save' }), ' Save')
+      ),
+      h('div', { className: 'form-group' },
+        h('label', null, 'Name'),
+        h('input', { className: 'form-control', value: org.name, onChange: e => setOrg({...org, name: e.target.value}) })
+      ),
+      h('div', { className: 'form-group' },
+        h('label', null, 'Description'),
+        h('textarea', { className: 'form-control', rows: 3, value: org.description, onChange: e => setOrg({...org, description: e.target.value}) })
+      ),
+      h('div', { className: 'form-group' },
+        h('label', null, 'Domains'),
+        h('input', { className: 'form-control', value: org.domains.join(', '), onChange: e => setOrg({...org, domains: e.target.value.split(',').map(s => s.trim())}) })
+      )
+    );
+  };
+
+  const ManageDrives = () => {
+    const [showModal, setShowModal] = useState(false);
+    return h('div', null,
+      h('div', { className: 'flex-between mb-4' },
+        h('p', { className: 'text-muted' }, 'Create and manage recruitment drives.'),
+        h('button', { className: 'btn', onClick: () => setShowModal(true) }, h('i', { className: 'fas fa-plus' }), ' New Drive')
+      ),
+      h('div', { className: 'grid-2' },
+        MOCK_DRIVES.map(d =>
+          h('div', { className: 'card', key: d.id },
+            h('div', { className: 'flex-between' },
+              h('div', null,
+                h('div', { style: { fontWeight: 600 } }, d.title),
+                h('div', { style: { fontSize: 13, color: 'var(--text-muted)' } }, d.org, ' · ', d.applicants, ' applicants')
+              ),
+              h('span', { className: `table-status ${d.status}` }, d.status.toUpperCase())
+            ),
+            h('div', { style: { marginTop: 8, fontSize: 14 } }, d.description),
+            h('div', { style: { marginTop: 8, fontSize: 13, color: 'var(--text-muted)' } }, h('i', { className: 'fas fa-calendar' }), ' Deadline: ', new Date(d.deadline).toLocaleDateString()),
+            h('div', { style: { marginTop: 12, display: 'flex', gap: 8 } },
+              h('button', { className: 'btn btn-secondary btn-sm' }, h('i', { className: 'fas fa-edit' }), ' Edit'),
+              h('button', { className: 'btn btn-secondary btn-sm' }, h('i', { className: 'fas fa-users' }), ' Applicants')
+            )
+          )
+        )
+      ),
+      showModal && h('div', { className: 'modal-overlay', onClick: (e) => { if (e.target === e.currentTarget) setShowModal(false); } },
+        h('div', { className: 'modal' },
+          h('h3', null, 'Create Drive'),
+          h('div', { className: 'form-group' },
+            h('label', null, 'Title'),
+            h('input', { className: 'form-control', placeholder: 'Full Stack Developer' })
+          ),
+          h('div', { className: 'form-group' },
+            h('label', null, 'Description'),
+            h('textarea', { className: 'form-control', rows: 2 })
+          ),
+          h('div', { className: 'form-row' },
+            h('div', { className: 'form-group' },
+              h('label', null, 'Deadline'),
+              h('input', { className: 'form-control', type: 'date' })
+            ),
+            h('div', { className: 'form-group' },
+              h('label', null, 'CV Weightage'),
+              h('input', { className: 'form-control', type: 'number', defaultValue: 20 })
+            )
+          ),
+          h('div', { style: { display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 16 } },
+            h('button', { className: 'btn btn-secondary', onClick: () => setShowModal(false) }, 'Cancel'),
+            h('button', { className: 'btn', onClick: () => { setShowModal(false); alert('Drive created!'); } }, 'Create')
+          )
+        )
+      )
+    );
+  };
+
+  const AIScreeningResults = () => {
+    return h('div', null,
+      h('div', { className: 'alert alert-info' },
+        h('i', { className: 'fas fa-robot' }), ' AI screening runs after the deadline. CVs are parsed and scored.'
+      ),
+      h('div', { className: 'card' },
+        h('div', { className: 'card-header' },
+          h('h3', null, 'AI Screening Results'),
+          h('span', { className: 'text-muted' }, h('i', { className: 'fas fa-sync' }), ' Refresh')
+        ),
+        h('div', { className: 'table-wrap' },
+          h('table', null,
+            h('thead', null,
+              h('tr', null, h('th', null, 'Candidate'), h('th', null, 'Domain'), h('th', null, 'CV Score'), h('th', null, 'AI Score'), h('th', null, 'Status'))
+            ),
+            h('tbody', null,
+              MOCK_CANDIDATES.filter(c => c.scores.ai !== null || c.scores.cv !== null).map(c =>
+                h('tr', { key: c.id },
+                  h('td', null, h('strong', null, c.name)),
+                  h('td', null, c.domain),
+                  h('td', null, c.scores.cv !== null ? `${c.scores.cv}%` : '—'),
+                  h('td', null, c.scores.ai !== null ? `${c.scores.ai}%` : '—'),
+                  h('td', null, h('span', { className: `table-status ${c.status}` }, c.status.replace('_', ' ').toUpperCase()))
+                )
+              )
+            )
+          )
+        )
+      )
+    );
+  };
+
+  const ScoreMatrix = () => {
+    const [filter, setFilter] = useState('all');
+    const domains = [...new Set(MOCK_CANDIDATES.map(c => c.domain))];
+    const filtered = filter === 'all' ? MOCK_CANDIDATES : MOCK_CANDIDATES.filter(c => c.domain === filter);
+    return h('div', null,
+      h('div', { className: 'flex-between mb-4' },
+        h('div', null,
+          h('select', { className: 'form-control', style: { width: 'auto', display: 'inline-block' }, value: filter, onChange: e => setFilter(e.target.value) },
+            h('option', { value: 'all' }, 'All Domains'),
+            domains.map(d => h('option', { key: d, value: d }, d))
+          )
+        ),
+        h('span', { className: 'text-muted' }, h('i', { className: 'fas fa-file-export' }), ' Export CSV')
+      ),
+      h('div', { className: 'card' },
+        h('div', { className: 'card-header' },
+          h('h3', null, 'Score Matrix')
+        ),
+        h('div', { className: 'table-wrap' },
+          h('table', null,
+            h('thead', null,
+              h('tr', null, h('th', null, 'Candidate'), h('th', null, 'Domain'), h('th', null, 'CV'), h('th', null, 'AI'), h('th', null, 'PI'), h('th', null, 'Final'), h('th', null, 'Status'))
+            ),
+            h('tbody', null,
+              filtered.map(c => {
+                const final = c.finalScore !== null ? c.finalScore : (c.scores.cv && c.scores.ai ? c.scores.cv*0.2 + c.scores.ai*0.4 : null);
+                return h('tr', { key: c.id },
+                  h('td', null, h('strong', null, c.name)),
+                  h('td', null, c.domain),
+                  h('td', null, c.scores.cv !== null ? `${c.scores.cv}%` : '—'),
+                  h('td', null, c.scores.ai !== null ? `${c.scores.ai}%` : '—'),
+                  h('td', null, c.scores.pi !== null ? `${c.scores.pi}%` : '—'),
+                  h('td', null, final !== null ? h('strong', { style: { color: 'var(--primary)' } }, final.toFixed(1), '%') : '—'),
+                  h('td', null, h('span', { className: `table-status ${c.status}` }, c.status.replace('_', ' ').toUpperCase()))
+                );
+              })
+            )
+          )
+        )
+      )
+    );
+  };
+
+  const ResultDispatch = () => {
+    const [sent, setSent] = useState(false);
+    return h('div', null,
+      h('div', { className: 'card' },
+        h('div', { className: 'card-header' },
+          h('h3', null, h('i', { className: 'fas fa-envelope' }), ' Automated Result Notifications')
+        ),
+        h('p', { className: 'text-muted' }, 'Dispatch result emails to all candidates in a single operation.'),
+        h('div', { className: 'grid-3 mt-4' },
+          h('div', { className: 'stat-card' },
+            h('div', { className: 'stat-label' }, 'Selected'),
+            h('div', { className: 'stat-value', style: { color: '#10b981' } }, MOCK_CANDIDATES.filter(c => c.status === 'selected').length)
+          ),
+          h('div', { className: 'stat-card' },
+            h('div', { className: 'stat-label' }, 'Waitlisted'),
+            h('div', { className: 'stat-value', style: { color: '#f59e0b' } }, MOCK_CANDIDATES.filter(c => c.status === 'waitlisted').length)
+          ),
+          h('div', { className: 'stat-card' },
+            h('div', { className: 'stat-label' }, 'Rejected'),
+            h('div', { className: 'stat-value', style: { color: '#ef4444' } }, MOCK_CANDIDATES.filter(c => c.status === 'rejected').length)
+          )
+        ),
+        h('button', { className: 'btn mt-4', onClick: () => { setSent(true); setTimeout(() => setSent(false), 3000); } },
+          h('i', { className: 'fas fa-paper-plane' }), ' Dispatch All Results'
+        ),
+        sent && h('div', { className: 'alert alert-success mt-4' }, h('i', { className: 'fas fa-check-circle' }), ' Emails sent successfully!')
+      )
+    );
+  };
+
+  // ---- Interviewer Pages ----
+  const InterviewerDashboard = ({ setSubPage, setSelectedCandidate }) => {
+    const assigned = MOCK_CANDIDATES.filter(c => c.interviewer === 'Priya Mehta');
+    return h('div', null,
+      h('div', { className: 'grid-3' },
+        h('div', { className: 'stat-card' }, h('div', { className: 'stat-value' }, assigned.length), h('div', { className: 'stat-label' }, 'Assigned')),
+        h('div', { className: 'stat-card' }, h('div', { className: 'stat-value' }, assigned.filter(c => c.scores.pi !== null).length), h('div', { className: 'stat-label' }, 'PI Done')),
+        h('div', { className: 'stat-card' }, h('div', { className: 'stat-value' }, assigned.filter(c => c.scores.pi === null).length), h('div', { className: 'stat-label' }, 'Pending'))
+      ),
+      h('div', { className: 'card' },
+        h('div', { className: 'card-header' },
+          h('h3', null, 'Assigned Candidates')
+        ),
+        assigned.map(c =>
+          h('div', { key: c.id, className: 'interviewer-candidate-card', onClick: () => { setSelectedCandidate(c.id); setSubPage('candidate'); } },
+            h('div', { className: 'avatar' }, c.name.split(' ').map(n => n[0]).join('')),
+            h('div', { className: 'info' },
+              h('div', { className: 'name' }, c.name),
+              h('div', { className: 'detail' }, c.domain, ' · ', c.year, ' · CGPA ', c.cgpa)
+            ),
+            h('div', null,
+              h('span', { className: `table-status ${c.scores.pi !== null ? 'selected' : 'pending'}` }, c.scores.pi !== null ? 'PI Done' : 'Pending')
+            )
+          )
+        )
+      )
+    );
+  };
+
+  const CandidateProfile = ({ candidateId, setSubPage }) => {
+    const candidate = MOCK_CANDIDATES.find(c => c.id === candidateId) || MOCK_CANDIDATES[0];
+    const [submitted, setSubmitted] = useState(false);
+    const [score, setScore] = useState({ tech: 70, comm: 70, prob: 70, cult: 70 });
+    const [remarks, setRemarks] = useState('');
+
+    const handleSubmit = () => {
+      setSubmitted(true);
+      alert('PI scorecard submitted!');
+      setTimeout(() => setSubPage('dashboard'), 500);
+    };
+
+    return h('div', null,
+      h('button', { className: 'btn btn-secondary btn-sm mb-4', onClick: () => setSubPage('dashboard') },
+        h('i', { className: 'fas fa-arrow-left' }), ' Back to Dashboard'
+      ),
+      h('div', { className: 'grid-2' },
+        h('div', { className: 'card' },
+          h('h3', null, 'Candidate: ', candidate.name),
+          h('p', null, candidate.email, ' · ', candidate.year, ' · ', candidate.branch),
+          h('p', null, 'CV Score: ', candidate.scores.cv, '% · AI Score: ', candidate.scores.ai, '%')
+        ),
+        h('div', { className: 'card' },
+          h('h3', null, 'AI Questions & Responses'),
+          MOCK_AI_QUESTIONS.map((q, i) =>
+            h('div', { key: i, style: { marginBottom: 12 } },
+              h('strong', null, 'Q', i+1, ': ', q),
+              h('div', { style: { color: 'var(--text-secondary)' } }, h('i', { className: 'fas fa-reply' }), ' ', MOCK_AI_RESPONSES[i] || 'No response')
+            )
+          )
+        )
+      ),
+      h('div', { className: 'card mt-4' },
+        h('h3', null, 'PI Scorecard'),
+        !submitted ?
+        h('div', null,
+          h('div', { className: 'form-row' },
+            h('div', { className: 'form-group' },
+              h('label', null, 'Technical'),
+              h('input', { className: 'form-control', type: 'number', value: score.tech, onChange: e => setScore({...score, tech: Number(e.target.value)}), min: 0, max: 100 })
+            ),
+            h('div', { className: 'form-group' },
+              h('label', null, 'Communication'),
+              h('input', { className: 'form-control', type: 'number', value: score.comm, onChange: e => setScore({...score, comm: Number(e.target.value)}), min: 0, max: 100 })
+            )
+          ),
+          h('div', { className: 'form-row' },
+            h('div', { className: 'form-group' },
+              h('label', null, 'Problem Solving'),
+              h('input', { className: 'form-control', type: 'number', value: score.prob, onChange: e => setScore({...score, prob: Number(e.target.value)}), min: 0, max: 100 })
+            ),
+            h('div', { className: 'form-group' },
+              h('label', null, 'Cultural Fit'),
+              h('input', { className: 'form-control', type: 'number', value: score.cult, onChange: e => setScore({...score, cult: Number(e.target.value)}), min: 0, max: 100 })
+            )
+          ),
+          h('div', { className: 'form-group' },
+            h('label', null, 'Remarks'),
+            h('textarea', { className: 'form-control', rows: 3, value: remarks, onChange: e => setRemarks(e.target.value) })
+          ),
+          h('button', { className: 'btn', onClick: handleSubmit }, h('i', { className: 'fas fa-save' }), ' Submit Scorecard')
+        ) :
+        h('div', { className: 'alert alert-success' }, h('i', { className: 'fas fa-check-circle' }), ' Scorecard submitted!')
+      )
+    );
+  };
+
+  // ---- Applicant Pages ----
+  const ApplicantDashboard = ({ setSubPage }) => {
+    const apps = MOCK_CANDIDATES.filter(c => c.name === 'Arjun Sharma');
+    return h('div', null,
+      h('div', { className: 'grid-3' },
+        h('div', { className: 'stat-card' }, h('div', { className: 'stat-value' }, apps.length), h('div', { className: 'stat-label' }, 'Applications')),
+        h('div', { className: 'stat-card' }, h('div', { className: 'stat-value' }, apps[0]?.status?.toUpperCase() || '—'), h('div', { className: 'stat-label' }, 'Status')),
+        h('div', { className: 'stat-card' }, h('div', { className: 'stat-value' }, apps[0]?.finalScore || '—'), h('div', { className: 'stat-label' }, 'Final Score'))
+      ),
+      h('div', { className: 'card' },
+        h('div', { className: 'card-header' },
+          h('h3', null, 'My Applications')
+        ),
+        h('div', { className: 'table-wrap' },
+          h('table', null,
+            h('thead', null,
+              h('tr', null, h('th', null, 'Role'), h('th', null, 'Status'), h('th', null, 'CV'), h('th', null, 'AI'), h('th', null, 'Final'))
+            ),
+            h('tbody', null,
+              apps.map(a =>
+                h('tr', { key: a.id },
+                  h('td', null, 'Full Stack Developer'),
+                  h('td', null, h('span', { className: `table-status ${a.status}` }, a.status.toUpperCase())),
+                  h('td', null, a.scores.cv || '—'),
+                  h('td', null, a.scores.ai || '—'),
+                  h('td', null, a.finalScore || '—')
+                )
+              )
+            )
+          )
+        ),
+        h('div', { style: { marginTop: 12, display: 'flex', gap: 8 } },
+          h('button', { className: 'btn btn-secondary btn-sm', onClick: () => setSubPage('status') }, h('i', { className: 'fas fa-clock' }), ' Timeline'),
+          h('button', { className: 'btn btn-sm', onClick: () => setSubPage('interview') }, h('i', { className: 'fas fa-microphone' }), ' AI Interview')
+        )
+      )
+    );
+  };
+
+  const ApplicantStatus = ({ setSubPage }) => {
+    const app = MOCK_CANDIDATES.find(c => c.name === 'Arjun Sharma');
+    return h('div', null,
+      h('button', { className: 'btn btn-secondary btn-sm mb-4', onClick: () => setSubPage('dashboard') },
+        h('i', { className: 'fas fa-arrow-left' }), ' Back'
+      ),
+      h('div', { className: 'card' },
+        h('h3', null, 'Application Timeline'),
+        h('div', null,
+          h('div', { style: { padding: '6px 0' } }, h('i', { className: 'fas fa-file-pdf' }), ' CV Submitted — ', h('span', { style: { color: 'green' } }, 'Completed')),
+          h('div', { style: { padding: '6px 0' } }, h('i', { className: 'fas fa-robot' }), ' AI Screening — ', h('span', { style: { color: app?.scores.ai ? 'green' : 'orange' } }, app?.scores.ai ? 'Completed' : 'In Progress')),
+          h('div', { style: { padding: '6px 0' } }, h('i', { className: 'fas fa-user-tie' }), ' PI Round — ', h('span', { style: { color: app?.scores.pi ? 'green' : 'gray' } }, app?.scores.pi ? 'Completed' : 'Pending')),
+          h('div', { style: { padding: '6px 0' } }, h('i', { className: 'fas fa-envelope' }), ' Result — ', h('span', { style: { color: app?.status === 'selected' ? 'green' : 'gray' } }, app?.status?.toUpperCase() || 'Pending'))
+        )
+      ),
+      app && h('div', { className: 'card mt-4' },
+        h('h3', null, 'Score Breakdown'),
+        h('div', null,
+          h('div', { style: { display: 'flex', justifyContent: 'space-between' } }, h('span', null, 'CV (20%)'), h('span', null, app.scores.cv || '—')),
+          h('div', { className: 'progress-bar' }, h('div', { className: 'fill', style: { width: `${app.scores.cv || 0}%` } })),
+          h('div', { style: { display: 'flex', justifyContent: 'space-between', marginTop: 12 } }, h('span', null, 'AI (40%)'), h('span', null, app.scores.ai || '—')),
+          h('div', { className: 'progress-bar' }, h('div', { className: 'fill', style: { width: `${app.scores.ai || 0}%` } })),
+          h('div', { style: { display: 'flex', justifyContent: 'space-between', marginTop: 12 } }, h('span', null, 'PI (40%)'), h('span', null, app.scores.pi || '—')),
+          h('div', { className: 'progress-bar' }, h('div', { className: 'fill', style: { width: `${app.scores.pi || 0}%` } })),
+          h('div', { style: { display: 'flex', justifyContent: 'space-between', marginTop: 12, fontWeight: 700, fontSize: 16, borderTop: '2px solid var(--border)', paddingTop: 12 } },
+            h('span', null, 'Final Score'),
+            h('span', { style: { color: 'var(--primary)' } }, app.finalScore !== null ? `${app.finalScore}%` : '—')
+          )
+        )
+      )
+    );
+  };
+
+  const AIInterview = ({ setSubPage }) => {
+    const [current, setCurrent] = useState(0);
+    const [responses, setResponses] = useState({});
+    const [submitted, setSubmitted] = useState(false);
+    const questions = MOCK_AI_QUESTIONS;
+
+    const handleSubmit = () => {
+      setSubmitted(true);
+      alert('AI interview submitted!');
+    };
+
+    return h('div', null,
+      h('button', { className: 'btn btn-secondary btn-sm mb-4', onClick: () => setSubPage('dashboard') },
+        h('i', { className: 'fas fa-arrow-left' }), ' Back'
+      ),
+      h('div', { className: 'card' },
+        h('div', { className: 'card-header' },
+          h('h3', null, h('i', { className: 'fas fa-microphone' }), ' AI Interview'),
+          h('span', null, submitted ? 'Submitted' : `${current+1}/${questions.length}`)
+        ),
+        submitted ?
+        h('div', { className: 'alert alert-success' }, h('i', { className: 'fas fa-check-circle' }), ' Interview submitted!') :
+        h('div', null,
+          h('div', { className: 'interview-question' },
+            h('div', { className: 'q-text' }, questions[current]),
+            h('textarea', { value: responses[current] || '', onChange: e => setResponses({...responses, [current]: e.target.value}), placeholder: 'Type your answer...' })
+          ),
+          h('div', { style: { display: 'flex', justifyContent: 'space-between' } },
+            h('button', { className: 'btn btn-secondary btn-sm', onClick: () => setCurrent(Math.max(0, current-1)), disabled: current === 0 },
+              h('i', { className: 'fas fa-arrow-left' }), ' Prev'
+            ),
+            current < questions.length - 1 ?
+            h('button', { className: 'btn btn-sm', onClick: () => setCurrent(current+1) }, 'Next ', h('i', { className: 'fas fa-arrow-right' })) :
+            h('button', { className: 'btn btn-sm', onClick: handleSubmit }, h('i', { className: 'fas fa-check' }), ' Submit')
+          )
+        )
+      )
+    );
+  };
+
+  // ============================================================
+  //  MAIN APP – with Dark Mode Toggle
+  // ============================================================
+
+  const App = () => {
+    const { user, login } = useAuth();
+    const [page, setPage] = useState('org');
+    const [darkMode, setDarkMode] = useState(false);
+
+    // Admin sub-page
+    const [adminSub, setAdminSub] = useState('dashboard');
+    // Interviewer sub
+    const [interviewerSub, setInterviewerSub] = useState('dashboard');
+    const [selectedCandidate, setSelectedCandidate] = useState(null);
+    // Applicant sub
+    const [applicantSub, setApplicantSub] = useState('dashboard');
+
+    // Apply dark mode attribute to <html>
+    useEffect(() => {
+      document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
+    }, [darkMode]);
+
+    const switchRole = (role) => {
+      login(role);
+      setPage(role === 'admin' ? 'admin' : role === 'interviewer' ? 'interviewer' : 'applicant');
+      setAdminSub('dashboard');
+      setInterviewerSub('dashboard');
+      setApplicantSub('dashboard');
+      setSelectedCandidate(null);
+    };
+
+    const renderContent = () => {
+      if (page === 'org') return h(OrgHub);
+      if (page === 'admin') {
+        switch (adminSub) {
+          case 'dashboard': return h(AdminDashboard);
+          case 'org-setup': return h(OrgSetup);
+          case 'drives': return h(ManageDrives);
+          case 'ai': return h(AIScreeningResults);
+          case 'matrix': return h(ScoreMatrix);
+          case 'results': return h(ResultDispatch);
+          default: return h('div', null, 'Unknown admin page');
+        }
+      }
+      if (page === 'interviewer') {
+        if (interviewerSub === 'dashboard') {
+          return h(InterviewerDashboard, { setSubPage: setInterviewerSub, setSelectedCandidate });
+        } else if (interviewerSub === 'candidate' && selectedCandidate) {
+          return h(CandidateProfile, { candidateId: selectedCandidate, setSubPage: setInterviewerSub });
+        }
+        return h('div', null, 'No candidate selected');
+      }
+      if (page === 'applicant') {
+        switch (applicantSub) {
+          case 'dashboard': return h(ApplicantDashboard, { setSubPage: setApplicantSub });
+          case 'status': return h(ApplicantStatus, { setSubPage: setApplicantSub });
+          case 'interview': return h(AIInterview, { setSubPage: setApplicantSub });
+          default: return h('div', null, 'Unknown applicant page');
+        }
+      }
+      return h('div', null, 'Select a page');
+    };
+
+    const adminTabs = [
+      { key: 'dashboard', label: 'Dashboard', icon: 'fa-gauge-high' },
+      { key: 'org-setup', label: 'Org Setup', icon: 'fa-building' },
+      { key: 'drives', label: 'Drives', icon: 'fa-bullhorn' },
+      { key: 'ai', label: 'AI Screening', icon: 'fa-robot' },
+      { key: 'matrix', label: 'Score Matrix', icon: 'fa-table' },
+      { key: 'results', label: 'Results', icon: 'fa-envelope' },
+    ];
+
+    return h('div', null,
+      h('nav', { className: 'top-nav' },
+        h('span', { className: 'brand' }, h('i', { className: 'fas fa-robot' }), ' RecruitIQ'),
+        h('button', { className: page === 'org' ? 'active' : '', onClick: () => { setPage('org'); } }, 'Org Hub'),
+        h('button', { className: page === 'admin' ? 'active' : '', onClick: () => switchRole('admin') }, 'Admin'),
+        h('button', { className: page === 'interviewer' ? 'active' : '', onClick: () => switchRole('interviewer') }, 'Interviewer'),
+        h('button', { className: page === 'applicant' ? 'active' : '', onClick: () => switchRole('applicant') }, 'Applicant'),
+        h('span', { className: 'role-badge' },
+          h('i', { className: `fas fa-${user.role === 'admin' ? 'user-shield' : user.role === 'interviewer' ? 'user-tie' : 'user'}` }),
+          user.role.charAt(0).toUpperCase() + user.role.slice(1)
+        ),
+        // Dark mode toggle
+        h('button', { className: 'dark-toggle', onClick: () => setDarkMode(!darkMode), title: 'Toggle dark mode' },
+          h('i', { className: darkMode ? 'fas fa-sun' : 'fas fa-moon' })
+        )
+      ),
+
+      // Sub-nav for admin
+      page === 'admin' && h('div', { className: 'sub-nav' },
+        adminTabs.map(tab =>
+          h('button', {
+            key: tab.key,
+            className: adminSub === tab.key ? 'active' : '',
+            onClick: () => setAdminSub(tab.key)
+          },
+            h('i', { className: `fas ${tab.icon}` }), ' ', tab.label
+          )
+        )
+      ),
+
+      // Sub-nav for interviewer
+      page === 'interviewer' && interviewerSub === 'dashboard' && h('div', { className: 'sub-nav' },
+        h('button', { className: 'active' }, h('i', { className: 'fas fa-users' }), ' Assigned Candidates')
+      ),
+
+      // Sub-nav for applicant
+      page === 'applicant' && h('div', { className: 'sub-nav' },
+        h('button', { className: applicantSub === 'dashboard' ? 'active' : '', onClick: () => setApplicantSub('dashboard') },
+          h('i', { className: 'fas fa-gauge-high' }), ' Dashboard'),
+        h('button', { className: applicantSub === 'status' ? 'active' : '', onClick: () => setApplicantSub('status') },
+          h('i', { className: 'fas fa-clock' }), ' Timeline'),
+        h('button', { className: applicantSub === 'interview' ? 'active' : '', onClick: () => setApplicantSub('interview') },
+          h('i', { className: 'fas fa-microphone' }), ' AI Interview')
+      ),
+
+      renderContent()
+    );
+  };
+
+  const Root = () => h(AuthProvider, null, h(App));
+  render(h(Root), document.getElementById('root'));
+</script>
+
+</body>
+</html>
