@@ -1,0 +1,506 @@
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .auth-root {
+    font-family: 'Inter', sans-serif;
+    background: #0F172A;
+    color: #E2E8F0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* NAV */
+  .auth-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    height: 60px;
+    border-bottom: 1px solid #1E293B;
+  }
+  .auth-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 17px;
+    color: #fff;
+    cursor: pointer;
+  }
+  .auth-logo-icon {
+    width: 30px; height: 30px;
+    background: #6366F1;
+    border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .auth-nav-hint { font-size: 13px; color: #64748B; }
+  .auth-nav-hint span { color: #6366F1; cursor: pointer; }
+  .auth-nav-hint span:hover { color: #818CF8; }
+
+  /* LAYOUT */
+  .auth-body {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 1rem;
+  }
+  .auth-card {
+    background: #1E293B;
+    border: 1px solid #334155;
+    border-radius: 18px;
+    padding: 36px 40px;
+    width: 100%;
+    max-width: 460px;
+  }
+
+  /* TABS */
+  .auth-tabs {
+    display: flex;
+    background: #0F172A;
+    border-radius: 10px;
+    padding: 4px;
+    margin-bottom: 32px;
+    gap: 2px;
+  }
+  .auth-tab {
+    flex: 1;
+    text-align: center;
+    padding: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #64748B;
+    cursor: pointer;
+    border-radius: 7px;
+    border: none;
+    background: none;
+    font-family: inherit;
+    transition: background 0.15s, color 0.15s;
+  }
+  .auth-tab.active {
+    background: #1E293B;
+    color: #F1F5F9;
+    border: 1px solid #334155;
+  }
+
+  /* HEADING */
+  .auth-heading { font-size: 22px; font-weight: 700; color: #F8FAFC; margin-bottom: 6px; }
+  .auth-sub { font-size: 14px; color: #64748B; margin-bottom: 28px; line-height: 1.5; }
+
+  /* ROLE SELECTOR */
+  .role-label { font-size: 12px; font-weight: 500; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
+  .role-pills {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  .role-pill {
+    flex: 1;
+    border: 1px solid #334155;
+    background: #0F172A;
+    border-radius: 10px;
+    padding: 10px 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .role-pill.selected {
+    border-color: #6366F1;
+    background: rgba(99,102,241,0.1);
+  }
+  .role-pill-icon { font-size: 20px; margin-bottom: 4px; }
+  .role-pill-name { font-size: 12px; font-weight: 500; color: #94A3B8; }
+  .role-pill.selected .role-pill-name { color: #A5B4FC; }
+
+  /* FORM */
+  .form-row { margin-bottom: 18px; }
+  .form-label { display: block; font-size: 13px; color: #94A3B8; margin-bottom: 6px; font-weight: 500; }
+  .form-input {
+    width: 100%;
+    background: #0F172A;
+    border: 1px solid #334155;
+    border-radius: 9px;
+    padding: 10px 14px;
+    font-size: 14px;
+    color: #F1F5F9;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .form-input::placeholder { color: #475569; }
+  .form-input:focus { border-color: #6366F1; }
+  .form-input-wrap { position: relative; }
+  .form-input-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #475569;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; }
+
+  .btn-submit {
+    width: 100%;
+    background: #6366F1;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.15s;
+    margin-top: 4px;
+  }
+  .btn-submit:hover { background: #4F46E5; }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 20px 0;
+  }
+  .divider-line { flex: 1; height: 1px; background: #1E293B; }
+  .divider-text { font-size: 12px; color: #475569; }
+
+  .form-footer {
+    text-align: center;
+    font-size: 13px;
+    color: #64748B;
+    margin-top: 20px;
+  }
+  .form-footer span { color: #6366F1; cursor: pointer; }
+  .form-footer span:hover { color: #818CF8; }
+
+  .forgot-link {
+    float: right;
+    font-size: 12px;
+    color: #6366F1;
+    cursor: pointer;
+    margin-top: -2px;
+  }
+  .forgot-link:hover { color: #818CF8; }
+
+  /* ROLE INFO BADGE */
+  .role-info {
+    background: rgba(99,102,241,0.08);
+    border: 1px solid rgba(99,102,241,0.2);
+    border-radius: 9px;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: #94A3B8;
+    margin-bottom: 22px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.5;
+  }
+  .role-info i { color: #818CF8; font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+
+  /* PANEL SWITCH */
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* Select dropdown */
+  .form-select {
+    width: 100%;
+    background: #0F172A;
+    border: 1px solid #334155;
+    border-radius: 9px;
+    padding: 10px 14px;
+    font-size: 14px;
+    color: #F1F5F9;
+    font-family: inherit;
+    outline: none;
+    appearance: none;
+    transition: border-color 0.15s;
+  }
+  .form-select:focus { border-color: #6366F1; }
+
+  .badge-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    color: #4ADE80;
+    background: rgba(34,197,94,0.08);
+    border: 1px solid rgba(34,197,94,0.2);
+    padding: 3px 9px;
+    border-radius: 20px;
+    margin-top: 8px;
+  }
+</style>
+
+<div class="auth-root">
+  <nav class="auth-nav">
+    <div class="auth-logo" onclick="sendPrompt('Go back to the landing page')">
+      <div class="auth-logo-icon">
+        <i class="ti ti-bolt" style="color:#fff;font-size:16px;" aria-hidden="true"></i>
+      </div>
+      RecruitIQ
+    </div>
+    <div class="auth-nav-hint" id="nav-hint">
+      New here? <span onclick="showRegister()">Create an account</span>
+    </div>
+  </nav>
+
+  <div class="auth-body">
+    <div class="auth-card">
+
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-login" onclick="showLogin()">Log in</button>
+        <button class="auth-tab" id="tab-register" onclick="showRegister()">Register</button>
+      </div>
+
+      <div class="panel active" id="panel-login">
+        <div class="auth-heading">Welcome back</div>
+        <div class="auth-sub">Log in to track your applications or manage your drive.</div>
+
+        <div class="role-label">Logging in as</div>
+        <div class="role-pills">
+          <div class="role-pill selected" id="lrole-applicant" onclick="setLoginRole('applicant')">
+            <div class="role-pill-icon"><i class="ti ti-user" aria-hidden="true"></i></div>
+            <div class="role-pill-name">Applicant</div>
+          </div>
+          <div class="role-pill" id="lrole-admin" onclick="setLoginRole('admin')">
+            <div class="role-pill-icon"><i class="ti ti-shield" aria-hidden="true"></i></div>
+            <div class="role-pill-name">Admin</div>
+          </div>
+          <div class="role-pill" id="lrole-interviewer" onclick="setLoginRole('interviewer')">
+            <div class="role-pill-icon"><i class="ti ti-clipboard-list" aria-hidden="true"></i></div>
+            <div class="role-pill-name">Interviewer</div>
+          </div>
+        </div>
+
+        <div class="role-info" id="login-role-info">
+          <i class="ti ti-info-circle" aria-hidden="true"></i>
+          <span id="login-role-text">Log in with your registered email and password to view your applications and attempt the AI round.</span>
+        </div>
+
+        <div class="form-row">
+          <label class="form-label">Email address</label>
+          <div class="form-input-wrap">
+            <input class="form-input" type="email" placeholder="you@example.com" style="padding-right:38px;">
+            <i class="ti ti-mail form-input-icon" aria-hidden="true"></i>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label class="form-label">
+            Password
+            <span class="forgot-link">Forgot password?</span>
+          </label>
+          <div class="form-input-wrap">
+            <input class="form-input" type="password" placeholder="Enter your password" style="padding-right:38px;" id="login-pw">
+            <i class="ti ti-eye form-input-icon" aria-hidden="true" onclick="togglePw('login-pw',this)"></i>
+          </div>
+        </div>
+
+        <button class="btn-submit" onclick="handleLogin()">Log in</button>
+
+        <div class="form-footer">
+          Don't have an account? <span onclick="showRegister()">Register here</span>
+        </div>
+      </div>
+
+      <div class="panel" id="panel-register">
+        <div class="auth-heading">Create your account</div>
+        <div class="auth-sub">Join as an applicant. Admins and interviewers are added by their org admin.</div>
+
+        <div class="role-label">Registering as</div>
+        <div class="role-pills">
+          <div class="role-pill selected" id="rrole-applicant" onclick="setRegRole('applicant')">
+            <div class="role-pill-icon"><i class="ti ti-user" aria-hidden="true"></i></div>
+            <div class="role-pill-name">Applicant</div>
+          </div>
+          <div class="role-pill" id="rrole-admin" onclick="setRegRole('admin')">
+            <div class="role-pill-icon"><i class="ti ti-shield" aria-hidden="true"></i></div>
+            <div class="role-pill-name">Admin</div>
+          </div>
+        </div>
+
+        <div class="role-info" id="reg-role-info">
+          <i class="ti ti-info-circle" aria-hidden="true"></i>
+          <span id="reg-role-text">Applicants can discover orgs, apply to drives, attempt the AI round, and track their results.</span>
+        </div>
+
+        <div id="reg-applicant-fields">
+          <div class="form-grid">
+            <div class="form-row" style="margin-bottom:0;">
+              <label class="form-label">First name</label>
+              <input class="form-input" type="text" placeholder="Arjun">
+            </div>
+            <div class="form-row" style="margin-bottom:0;">
+              <label class="form-label">Last name</label>
+              <input class="form-input" type="text" placeholder="Sharma">
+            </div>
+          </div>
+
+          <div class="form-row" style="margin-top:18px;">
+            <label class="form-label">Email address</label>
+            <div class="form-input-wrap">
+              <input class="form-input" type="email" placeholder="you@example.com" style="padding-right:38px;">
+              <i class="ti ti-mail form-input-icon" aria-hidden="true"></i>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-row" style="margin-bottom:0;">
+              <label class="form-label">Year</label>
+              <select class="form-select">
+                <option value="">Select year</option>
+                <option>1st Year</option>
+                <option>2nd Year</option>
+                <option>3rd Year</option>
+                <option>4th Year</option>
+              </select>
+            </div>
+            <div class="form-row" style="margin-bottom:0;">
+              <label class="form-label">Branch</label>
+              <select class="form-select">
+                <option value="">Select branch</option>
+                <option>CSE</option>
+                <option>ECE</option>
+                <option>ME</option>
+                <option>CE</option>
+                <option>EE</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row" style="margin-top:18px;">
+            <label class="form-label">Password</label>
+            <div class="form-input-wrap">
+              <input class="form-input" type="password" placeholder="Min. 8 characters" style="padding-right:38px;" id="reg-pw">
+              <i class="ti ti-eye form-input-icon" aria-hidden="true" onclick="togglePw('reg-pw',this)"></i>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <label class="form-label">Confirm password</label>
+            <div class="form-input-wrap">
+              <input class="form-input" type="password" placeholder="Repeat your password" style="padding-right:38px;" id="reg-pw2">
+              <i class="ti ti-eye form-input-icon" aria-hidden="true" onclick="togglePw('reg-pw2',this)"></i>
+            </div>
+          </div>
+        </div>
+
+        <div id="reg-admin-fields" style="display:none;">
+          <div class="form-row">
+            <label class="form-label">Organization name</label>
+            <input class="form-input" type="text" placeholder="e.g. CodeCell NIT Raipur">
+          </div>
+          <div class="form-row">
+            <label class="form-label">Admin email</label>
+            <div class="form-input-wrap">
+              <input class="form-input" type="email" placeholder="admin@org.com" style="padding-right:38px;">
+              <i class="ti ti-mail form-input-icon" aria-hidden="true"></i>
+            </div>
+          </div>
+          <div class="form-row">
+            <label class="form-label">Password</label>
+            <div class="form-input-wrap">
+              <input class="form-input" type="password" placeholder="Min. 8 characters" style="padding-right:38px;" id="admin-pw">
+              <i class="ti ti-eye form-input-icon" aria-hidden="true" onclick="togglePw('admin-pw',this)"></i>
+            </div>
+          </div>
+          <div style="margin-bottom:18px;">
+            <div class="badge-note">
+              <i class="ti ti-shield-check" style="font-size:12px;" aria-hidden="true"></i>
+              Admin accounts are verified before activation
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-submit" onclick="handleRegister()">Create account</button>
+
+        <div class="form-footer">
+          Already have an account? <span onclick="showLogin()">Log in</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  let loginRole = 'applicant';
+  let regRole = 'applicant';
+
+  const loginRoleInfo = {
+    applicant: 'Log in with your registered email and password to view your applications and attempt the AI round.',
+    admin: 'Admin access lets you manage drives, review the score matrix, and dispatch result emails.',
+    interviewer: 'Log in to view your assigned candidates, their AI scores, and submit scorecards.'
+  };
+
+  const regRoleInfo = {
+    applicant: 'Applicants can discover orgs, apply to drives, attempt the AI round, and track their results.',
+    admin: 'Create an org account to open drives, assign interviewers, and manage the full pipeline.'
+  };
+
+  function showLogin() {
+    document.getElementById('panel-login').classList.add('active');
+    document.getElementById('panel-register').classList.remove('active');
+    document.getElementById('tab-login').classList.add('active');
+    document.getElementById('tab-register').classList.remove('active');
+    document.getElementById('nav-hint').innerHTML = 'New here? <span onclick="showRegister()">Create an account</span>';
+  }
+
+  function showRegister() {
+    document.getElementById('panel-register').classList.add('active');
+    document.getElementById('panel-login').classList.remove('active');
+    document.getElementById('tab-register').classList.add('active');
+    document.getElementById('tab-login').classList.remove('active');
+    document.getElementById('nav-hint').innerHTML = 'Have an account? <span onclick="showLogin()">Log in</span>';
+  }
+
+  function setLoginRole(role) {
+    loginRole = role;
+    ['applicant','admin','interviewer'].forEach(r => {
+      document.getElementById('lrole-' + r).classList.remove('selected');
+    });
+    document.getElementById('lrole-' + role).classList.add('selected');
+    document.getElementById('login-role-text').textContent = loginRoleInfo[role];
+  }
+
+  function setRegRole(role) {
+    regRole = role;
+    ['applicant','admin'].forEach(r => {
+      document.getElementById('rrole-' + r).classList.remove('selected');
+    });
+    document.getElementById('rrole-' + role).classList.add('selected');
+    document.getElementById('reg-role-text').textContent = regRoleInfo[role];
+    document.getElementById('reg-applicant-fields').style.display = role === 'applicant' ? 'block' : 'none';
+    document.getElementById('reg-admin-fields').style.display = role === 'admin' ? 'block' : 'none';
+  }
+
+  function togglePw(id, icon) {
+    const input = document.getElementById(id);
+    if (input.type === 'password') {
+      input.type = 'text';
+      icon.classList.remove('ti-eye');
+      icon.classList.add('ti-eye-off');
+    } else {
+      input.type = 'password';
+      icon.classList.remove('ti-eye-off');
+      icon.classList.add('ti-eye');
+    }
+  }
+
+  function handleLogin() {
+    if (loginRole === 'applicant') sendPrompt('Show me the applicant dashboard');
+    else if (loginRole === 'admin') sendPrompt('Show me the admin dashboard');
+    else sendPrompt('Show me the interviewer dashboard');
+  }
+
+  function handleRegister() {
+    if (regRole === 'applicant') sendPrompt('Show me the applicant dashboard after registration');
+    else sendPrompt('Show me the admin dashboard after org registration');
+  }
+</script>

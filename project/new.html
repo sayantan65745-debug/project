@@ -1,0 +1,666 @@
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .ap-root {
+    font-family: 'Inter', sans-serif;
+    background: #0F172A;
+    color: #E2E8F0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* TOP NAV */
+  .ap-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    height: 60px;
+    border-bottom: 1px solid #1E293B;
+    background: #0F172A;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .ap-logo {
+    display: flex; align-items: center; gap: 10px;
+    font-weight: 700; font-size: 17px; color: #fff; cursor: pointer;
+  }
+  .ap-logo-icon {
+    width: 30px; height: 30px; background: #6366F1;
+    border-radius: 7px; display: flex; align-items: center; justify-content: center;
+  }
+  .ap-nav-right { display: flex; align-items: center; gap: 16px; }
+  .ap-avatar {
+    width: 34px; height: 34px; background: rgba(99,102,241,0.2);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 600; color: #818CF8; cursor: pointer;
+    border: 1px solid rgba(99,102,241,0.3);
+  }
+  .ap-notif {
+    position: relative; cursor: pointer;
+    color: #64748B; font-size: 18px;
+  }
+  .notif-dot {
+    position: absolute; top: -2px; right: -2px;
+    width: 8px; height: 8px;
+    background: #6366F1; border-radius: 50%;
+    border: 2px solid #0F172A;
+  }
+
+  /* LAYOUT */
+  .ap-body {
+    display: flex;
+    flex: 1;
+  }
+
+  /* SIDEBAR */
+  .ap-sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    border-right: 1px solid #1E293B;
+    padding: 24px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .sidebar-section {
+    font-size: 10px;
+    font-weight: 600;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0 20px;
+    margin: 16px 0 6px;
+  }
+  .sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 20px;
+    font-size: 14px;
+    color: #64748B;
+    cursor: pointer;
+    border-radius: 0;
+    transition: background 0.1s, color 0.1s;
+    border-left: 2px solid transparent;
+  }
+  .sidebar-link:hover { background: #1E293B; color: #E2E8F0; }
+  .sidebar-link.active {
+    background: rgba(99,102,241,0.1);
+    color: #A5B4FC;
+    border-left-color: #6366F1;
+  }
+  .sidebar-link i { font-size: 17px; }
+  .sidebar-badge {
+    margin-left: auto;
+    background: #6366F1;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 20px;
+  }
+
+  /* MAIN */
+  .ap-main {
+    flex: 1;
+    padding: 32px 36px;
+    overflow-y: auto;
+  }
+
+  /* PAGE HEADER */
+  .page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .page-title { font-size: 22px; font-weight: 700; color: #F8FAFC; }
+  .page-sub { font-size: 14px; color: #64748B; margin-top: 4px; }
+  .btn-primary {
+    display: flex; align-items: center; gap: 7px;
+    background: #6366F1; color: #fff; border: none;
+    border-radius: 9px; padding: 10px 18px;
+    font-size: 14px; font-weight: 500; font-family: inherit;
+    cursor: pointer; transition: background 0.15s; white-space: nowrap;
+  }
+  .btn-primary:hover { background: #4F46E5; }
+
+  /* STAT CARDS */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 14px;
+    margin-bottom: 32px;
+  }
+  .stat-card {
+    background: #1E293B;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 16px 18px;
+  }
+  .stat-label { font-size: 12px; color: #64748B; margin-bottom: 6px; }
+  .stat-num { font-size: 26px; font-weight: 700; color: #F8FAFC; letter-spacing: -0.02em; }
+  .stat-hint { font-size: 11px; color: #475569; margin-top: 4px; }
+  .stat-num.accent { color: #818CF8; }
+  .stat-num.success { color: #4ADE80; }
+  .stat-num.warn { color: #FCD34D; }
+
+  /* SECTION TITLE */
+  .section-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #F1F5F9;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title span {
+    font-size: 12px;
+    font-weight: 400;
+    color: #475569;
+  }
+
+  /* APPLICATION CARDS */
+  .app-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 40px;
+  }
+  .app-card {
+    background: #1E293B;
+    border: 1px solid #334155;
+    border-radius: 14px;
+    padding: 20px 22px;
+    transition: border-color 0.15s;
+  }
+  .app-card:hover { border-color: #4B5563; }
+  .app-card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+  .app-card-left { display: flex; align-items: center; gap: 14px; }
+  .app-org-avatar {
+    width: 42px; height: 42px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 14px; flex-shrink: 0;
+  }
+  .app-role { font-size: 15px; font-weight: 600; color: #F1F5F9; }
+  .app-org-name { font-size: 12px; color: #64748B; margin-top: 2px; }
+  .app-card-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+  /* STATUS BADGE */
+  .status-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 11px; font-weight: 500;
+    padding: 4px 10px; border-radius: 20px;
+  }
+  .status-badge i { font-size: 10px; }
+  .status-applied { background: rgba(100,116,139,0.15); color: #94A3B8; border: 1px solid #334155; }
+  .status-ai { background: rgba(99,102,241,0.12); color: #A5B4FC; border: 1px solid rgba(99,102,241,0.25); }
+  .status-pi { background: rgba(251,191,36,0.1); color: #FCD34D; border: 1px solid rgba(251,191,36,0.2); }
+  .status-selected { background: rgba(34,197,94,0.1); color: #4ADE80; border: 1px solid rgba(34,197,94,0.2); }
+  .status-rejected { background: rgba(239,68,68,0.1); color: #F87171; border: 1px solid rgba(239,68,68,0.2); }
+  .status-waitlist { background: rgba(251,191,36,0.08); color: #FCD34D; border: 1px solid rgba(251,191,36,0.15); }
+
+  /* PIPELINE STEPS */
+  .pipeline-steps {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 14px;
+  }
+  .ps-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    flex: 1;
+    position: relative;
+  }
+  .ps-dot {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    z-index: 1;
+    flex-shrink: 0;
+  }
+  .ps-dot.done { background: #22D3EE; color: #0F172A; }
+  .ps-dot.active { background: #6366F1; color: #fff; }
+  .ps-dot.pending { background: #1E3A5F; color: #475569; border: 1px solid #334155; }
+  .ps-dot.failed { background: rgba(239,68,68,0.15); color: #F87171; border: 1px solid rgba(239,68,68,0.3); }
+  .ps-label { font-size: 10px; color: #475569; text-align: center; white-space: nowrap; }
+  .ps-label.active-label { color: #A5B4FC; }
+  .ps-line {
+    flex: 1;
+    height: 2px;
+    background: #1E3A5F;
+    margin-bottom: 14px;
+    position: relative;
+    top: -7px;
+  }
+  .ps-line.done { background: #22D3EE; }
+  .ps-line.active { background: linear-gradient(90deg, #22D3EE, #6366F1); }
+
+  /* CARD ACTIONS */
+  .app-card-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding-top: 14px;
+    border-top: 1px solid #1E293B;
+  }
+  .btn-sm {
+    display: flex; align-items: center; gap: 6px;
+    padding: 7px 14px; border-radius: 8px;
+    font-size: 13px; font-weight: 500; font-family: inherit;
+    cursor: pointer; transition: background 0.15s, border-color 0.15s;
+    white-space: nowrap;
+  }
+  .btn-sm i { font-size: 14px; }
+  .btn-accent {
+    background: #6366F1; color: #fff; border: 1px solid #6366F1;
+  }
+  .btn-accent:hover { background: #4F46E5; }
+  .btn-outline {
+    background: none; color: #94A3B8; border: 1px solid #334155;
+  }
+  .btn-outline:hover { border-color: #6366F1; color: #A5B4FC; }
+  .btn-disabled {
+    background: none; color: #475569; border: 1px solid #1E293B; cursor: not-allowed;
+  }
+
+  /* SCORE CHIPS */
+  .score-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+  .score-chip {
+    display: flex; align-items: center; gap: 6px;
+    background: #0F172A; border: 1px solid #334155;
+    border-radius: 8px; padding: 5px 12px;
+    font-size: 12px;
+  }
+  .score-chip-label { color: #64748B; }
+  .score-chip-val { font-weight: 600; color: #F1F5F9; }
+  .score-chip-val.high { color: #4ADE80; }
+  .score-chip-val.mid { color: #FCD34D; }
+
+  /* DISCOVER SECTION */
+  .discover-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 12px;
+  }
+  .discover-card {
+    background: #1E293B;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 16px 18px;
+    cursor: pointer;
+    transition: border-color 0.15s;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .discover-card:hover { border-color: #6366F1; }
+  .discover-top { display: flex; align-items: center; gap: 10px; }
+  .discover-avatar {
+    width: 36px; height: 36px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 12px;
+  }
+  .discover-role { font-size: 14px; font-weight: 600; color: #F1F5F9; }
+  .discover-org { font-size: 12px; color: #64748B; }
+  .discover-meta { display: flex; gap: 8px; flex-wrap: wrap; }
+  .tag-sm {
+    font-size: 11px; font-weight: 500;
+    padding: 2px 8px; border-radius: 20px;
+  }
+  .tag-domain { background: rgba(34,211,238,0.1); color: #22D3EE; border: 1px solid rgba(34,211,238,0.2); }
+  .tag-open { background: rgba(34,197,94,0.1); color: #4ADE80; border: 1px solid rgba(34,197,94,0.2); }
+  .deadline-sm { font-size: 11px; color: #475569; display: flex; align-items: center; gap: 4px; }
+</style>
+
+<div class="ap-root">
+  <nav class="ap-nav">
+    <div class="ap-logo" onclick="sendPrompt('Go back to the landing page')">
+      <div class="ap-logo-icon">
+        <i class="ti ti-bolt" style="color:#fff;font-size:16px;" aria-hidden="true"></i>
+      </div>
+      RecruitIQ
+    </div>
+    <div class="ap-nav-right">
+      <div class="ap-notif">
+        <i class="ti ti-bell" aria-hidden="true"></i>
+        <div class="notif-dot"></div>
+      </div>
+      <div class="ap-avatar">AS</div>
+    </div>
+  </nav>
+
+  <div class="ap-body">
+    <aside class="ap-sidebar">
+      <div class="sidebar-section">Menu</div>
+      <div class="sidebar-link active">
+        <i class="ti ti-layout-dashboard" aria-hidden="true"></i> Dashboard
+      </div>
+      <div class="sidebar-link" onclick="sendPrompt('Show me all active drives to apply to')">
+        <i class="ti ti-search" aria-hidden="true"></i> Browse drives
+      </div>
+      <div class="sidebar-link">
+        <i class="ti ti-file-text" aria-hidden="true"></i> My applications
+        <span class="sidebar-badge">3</span>
+      </div>
+      <div class="sidebar-section">Account</div>
+      <div class="sidebar-link">
+        <i class="ti ti-user" aria-hidden="true"></i> Profile
+      </div>
+      <div class="sidebar-link" onclick="sendPrompt('Show me the login page')">
+        <i class="ti ti-logout" aria-hidden="true"></i> Log out
+      </div>
+    </aside>
+
+    <main class="ap-main">
+
+      <div class="page-header">
+        <div>
+          <div class="page-title">Good morning, Arjun 👋</div>
+          <div class="page-sub">Here's where all your applications stand right now.</div>
+        </div>
+        <button class="btn-primary" onclick="sendPrompt('Show me all active drives to apply to')">
+          <i class="ti ti-plus" aria-hidden="true"></i> Apply to a drive
+        </button>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-label">Total applied</div>
+          <div class="stat-num accent">3</div>
+          <div class="stat-hint">This recruitment cycle</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">AI rounds pending</div>
+          <div class="stat-num warn">1</div>
+          <div class="stat-hint">Attempt before deadline</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">In PI round</div>
+          <div class="stat-num" style="color:#22D3EE;">1</div>
+          <div class="stat-hint">Interview scheduled</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Results out</div>
+          <div class="stat-num success">1</div>
+          <div class="stat-hint">Check your email</div>
+        </div>
+      </div>
+
+      <div class="section-title">
+        My applications <span>3 total</span>
+      </div>
+      <div class="app-cards">
+
+        <div class="app-card">
+          <div class="app-card-top">
+            <div class="app-card-left">
+              <div class="app-org-avatar" style="background:rgba(99,102,241,0.18);color:#818CF8;">CC</div>
+              <div>
+                <div class="app-role">Full Stack Developer</div>
+                <div class="app-org-name">CodeCell · Tech Domain</div>
+              </div>
+            </div>
+            <div class="app-card-right">
+              <span class="status-badge status-ai">
+                <i class="ti ti-robot" aria-hidden="true"></i> AI Round open
+              </span>
+            </div>
+          </div>
+
+          <div class="pipeline-steps">
+            <div class="ps-step">
+              <div class="ps-dot done"><i class="ti ti-check" aria-hidden="true"></i></div>
+              <div class="ps-label">Applied</div>
+            </div>
+            <div class="ps-line done"></div>
+            <div class="ps-step">
+              <div class="ps-dot done"><i class="ti ti-check" aria-hidden="true"></i></div>
+              <div class="ps-label">CV Scored</div>
+            </div>
+            <div class="ps-line active"></div>
+            <div class="ps-step">
+              <div class="ps-dot active"><i class="ti ti-robot" aria-hidden="true"></i></div>
+              <div class="ps-label active-label">AI Round</div>
+            </div>
+            <div class="ps-line"></div>
+            <div class="ps-step">
+              <div class="ps-dot pending"><i class="ti ti-users" aria-hidden="true"></i></div>
+              <div class="ps-label">PI Round</div>
+            </div>
+            <div class="ps-line"></div>
+            <div class="ps-step">
+              <div class="ps-dot pending"><i class="ti ti-trophy" aria-hidden="true"></i></div>
+              <div class="ps-label">Result</div>
+            </div>
+          </div>
+
+          <div class="score-row">
+            <div class="score-chip">
+              <span class="score-chip-label">CV Score</span>
+              <span class="score-chip-val high">78 / 100</span>
+            </div>
+            <div class="score-chip">
+              <span class="score-chip-label">AI Round</span>
+              <span class="score-chip-val" style="color:#475569;">Not attempted</span>
+            </div>
+            <div class="score-chip">
+              <span class="score-chip-label">Deadline</span>
+              <span class="score-chip-val" style="color:#FCD34D;">Jul 10, 11:59 PM</span>
+            </div>
+          </div>
+
+          <div class="app-card-actions">
+            <button class="btn-sm btn-accent" onclick="sendPrompt('Show me the AI round page for Full Stack Developer at CodeCell')">
+              <i class="ti ti-robot" aria-hidden="true"></i> Attempt AI Round
+            </button>
+            <button class="btn-sm btn-outline" onclick="sendPrompt('Show me the apply page for Full Stack Developer at CodeCell to view my submitted application')">
+              <i class="ti ti-file-text" aria-hidden="true"></i> View application
+            </button>
+          </div>
+        </div>
+
+        <div class="app-card">
+          <div class="app-card-top">
+            <div class="app-card-left">
+              <div class="app-org-avatar" style="background:rgba(236,72,153,0.15);color:#F472B6;">DH</div>
+              <div>
+                <div class="app-role">UI / UX Designer</div>
+                <div class="app-org-name">DesignHub · Visual Domain</div>
+              </div>
+            </div>
+            <div class="app-card-right">
+              <span class="status-badge status-pi">
+                <i class="ti ti-calendar" aria-hidden="true"></i> PI Round
+              </span>
+            </div>
+          </div>
+
+          <div class="pipeline-steps">
+            <div class="ps-step">
+              <div class="ps-dot done"><i class="ti ti-check" aria-hidden="true"></i></div>
+              <div class="ps-label">Applied</div>
+            </div>
+            <div class="ps-line done"></div>
+            <div class="ps-step">
+              <div class="ps-dot done"><i class="ti ti-check" aria-hidden="true"></i></div>
+              <div class="ps-label">CV Scored</div>
+            </div>
+            <div class="ps-line done"></div>
+            <div class="ps-step">
+              <div class="ps-dot done"><i class="ti ti-check" aria-hidden="true"></i></div>
+              <div class="ps-label">AI Round</div>
+            </div>
+            <div class="ps-line active"></div>
+            <div class="ps-step">
+              <div class="ps-dot active"><i class="ti ti-users" aria-hidden="true"></i></div>
+              <div class="ps-label active-label">PI Round</div>
+            </div>
+            <div class="ps-line"></div>
+            <div class="ps-step">
+              <div class="ps-dot pending"><i class="ti ti-trophy" aria-hidden="true"></i></div>
+              <div class="ps-label">Result</div>
+            </div>
+          </div>
+
+          <div class="score-row">
+            <div class="score-chip">
+              <span class="score-chip-label">CV Score</span>
+              <span class="score-chip-val high">82 / 100</span>
+            </div>
+            <div class="score-chip">
+              <span class="score-chip-label">AI Round</span>
+              <span class="score-chip-val mid">71 / 100</span>
+            </div>
+            <div class="score-chip">
+              <span class="score-chip-label">PI Round</span>
+              <span class="score-chip-val" style="color:#475569;">Awaiting interview</span>
+            </div>
+          </div>
+
+          <div class="app-card-actions">
+            <button class="btn-sm btn-disabled" disabled>
+              <i class="ti ti-robot" aria-hidden="true"></i> AI Round completed
+            </button>
+            <button class="btn-sm btn-outline">
+              <i class="ti ti-file-text" aria-hidden="true"></i> View application
+            </button>
+          </div>
+        </div>
+
+        <div class="app-card" style="border-color: rgba(34,197,94,0.25);">
+          <div class="app-card-top">
+            <div class="app-card-left">
+              <div class="app-org-avatar" style="background:rgba(251,191,36,0.12);color:#FCD34D;">VC</div>
+              <div>
+                <div class="app-role">Finance Analyst</div>
+                <div class="app-org-name">Venture Cell · Finance Domain</div>
+              </div>
+            </div>
+            <div class="app-card-right">
+              <span class="status-badge status-selected">
+                <i class="ti ti-circle-check" aria-hidden="true"></i> Selected
+              </span>
+            </div>
+          </div>
+
+          <div class="pipeline-steps">
+            <div class="ps-step">
+              <div class="ps-dot done"><i class="ti ti-check" aria-hidden="true"></i></div>
+              <div class="ps-label">Applied</div>
+            </div>
+            <div class="ps-line done"></div>
+            <div class="ps-step">
+              <div class="ps-dot done"><i class="ti ti-check" aria-hidden="true"></i></div>
+              <div class="ps-label">CV Scored</div>
+            </div>
+            <div class="ps-line done"></div>
+            <div class="ps-step">
+              <div class="ps-dot done"><i class="ti ti-check" aria-hidden="true"></i></div>
+              <div class="ps-label">AI Round</div>
+            </div>
+            <div class="ps-line done"></div>
+            <div class="ps-step">
+              <div class="ps-dot done"><i class="ti ti-check" aria-hidden="true"></i></div>
+              <div class="ps-label">PI Round</div>
+            </div>
+            <div class="ps-line done"></div>
+            <div class="ps-step">
+              <div class="ps-dot" style="background:rgba(34,197,94,0.2);color:#4ADE80;border:1px solid rgba(34,197,94,0.3);">
+                <i class="ti ti-trophy" aria-hidden="true"></i>
+              </div>
+              <div class="ps-label" style="color:#4ADE80;">Selected!</div>
+            </div>
+          </div>
+
+          <div class="score-row">
+            <div class="score-chip">
+              <span class="score-chip-label">CV Score</span>
+              <span class="score-chip-val high">85 / 100</span>
+            </div>
+            <div class="score-chip">
+              <span class="score-chip-label">AI Round</span>
+              <span class="score-chip-val high">79 / 100</span>
+            </div>
+            <div class="score-chip">
+              <span class="score-chip-label">PI Round</span>
+              <span class="score-chip-val high">88 / 100</span>
+            </div>
+            <div class="score-chip">
+              <span class="score-chip-label">Final Score</span>
+              <span class="score-chip-val high" style="color:#818CF8;">83.4 / 100</span>
+            </div>
+          </div>
+
+          <div class="app-card-actions">
+            <button class="btn-sm btn-outline" style="color:#4ADE80;border-color:rgba(34,197,94,0.3);">
+              <i class="ti ti-mail" aria-hidden="true"></i> Acceptance email sent
+            </button>
+            <button class="btn-sm btn-outline">
+              <i class="ti ti-file-text" aria-hidden="true"></i> View application
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="section-title">
+        More drives to explore <span>2 open</span>
+      </div>
+      <div class="discover-grid">
+        <div class="discover-card" onclick="sendPrompt('Show me the apply page for ML Engineer at CodeCell')">
+          <div class="discover-top">
+            <div class="discover-avatar" style="background:rgba(99,102,241,0.18);color:#818CF8;">CC</div>
+            <div>
+              <div class="discover-role">ML Engineer</div>
+              <div class="discover-org">CodeCell</div>
+            </div>
+          </div>
+          <div class="discover-meta">
+            <span class="tag-sm tag-domain">ML</span>
+            <span class="tag-sm tag-open">Open</span>
+            <span class="deadline-sm"><i class="ti ti-calendar" style="font-size:12px;" aria-hidden="true"></i> Jul 10</span>
+          </div>
+        </div>
+        <div class="discover-card" onclick="sendPrompt('Show me the apply page for Product Manager at Venture Cell')">
+          <div class="discover-top">
+            <div class="discover-avatar" style="background:rgba(251,191,36,0.12);color:#FCD34D;">VC</div>
+            <div>
+              <div class="discover-role">Product Manager</div>
+              <div class="discover-org">Venture Cell</div>
+            </div>
+          </div>
+          <div class="discover-meta">
+            <span class="tag-sm tag-domain">Strategy</span>
+            <span class="tag-sm tag-open">Open</span>
+            <span class="deadline-sm"><i class="ti ti-calendar" style="font-size:12px;" aria-hidden="true"></i> Jul 15</span>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>

@@ -1,0 +1,561 @@
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .lp-root {
+    font-family: 'Inter', sans-serif;
+    background: #0F172A;
+    color: #E2E8F0;
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  .lp-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    height: 60px;
+    border-bottom: 1px solid #1E293B;
+    background: rgba(15,23,42,0.95);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .lp-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 18px;
+    color: #fff;
+  }
+  .lp-logo-icon {
+    width: 32px;
+    height: 32px;
+    background: #6366F1;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .lp-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-ghost {
+    background: none;
+    border: 1px solid #334155;
+    color: #94A3B8;
+    padding: 7px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .btn-ghost:hover { border-color: #6366F1; color: #E2E8F0; }
+  .btn-primary {
+    background: #6366F1;
+    border: 1px solid #6366F1;
+    color: #fff;
+    padding: 7px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.15s;
+  }
+  .btn-primary:hover { background: #4F46E5; }
+
+  /* HERO */
+  .lp-hero {
+    text-align: center;
+    padding: 72px 2rem 56px;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .lp-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(99,102,241,0.12);
+    border: 1px solid rgba(99,102,241,0.3);
+    color: #A5B4FC;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 24px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .lp-h1 {
+    font-size: 44px;
+    font-weight: 700;
+    line-height: 1.15;
+    color: #F8FAFC;
+    margin-bottom: 16px;
+    letter-spacing: -0.02em;
+  }
+  .lp-h1 span { color: #818CF8; }
+  .lp-sub {
+    font-size: 17px;
+    color: #94A3B8;
+    line-height: 1.7;
+    max-width: 560px;
+    margin: 0 auto 36px;
+  }
+  .lp-hero-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .btn-lg {
+    padding: 11px 24px;
+    font-size: 15px;
+    border-radius: 10px;
+  }
+
+  /* STATS */
+  .lp-stats {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    padding: 24px 2rem 48px;
+    flex-wrap: wrap;
+  }
+  .lp-stat { text-align: center; }
+  .lp-stat-num {
+    font-size: 28px;
+    font-weight: 700;
+    color: #F8FAFC;
+    letter-spacing: -0.02em;
+  }
+  .lp-stat-label { font-size: 13px; color: #64748B; margin-top: 2px; }
+
+  /* SECTION */
+  .lp-section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem 64px;
+  }
+  .lp-section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+  .lp-section-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #F1F5F9;
+  }
+  .lp-section-link {
+    font-size: 13px;
+    color: #6366F1;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .lp-section-link:hover { color: #818CF8; }
+
+  /* ORG CARDS */
+  .orgs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+  }
+  .org-card {
+    background: #1E293B;
+    border: 1px solid #334155;
+    border-radius: 14px;
+    padding: 20px;
+    cursor: pointer;
+    transition: border-color 0.15s, transform 0.15s;
+  }
+  .org-card:hover { border-color: #6366F1; transform: translateY(-2px); }
+  .org-card-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .org-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .org-name { font-size: 15px; font-weight: 600; color: #F1F5F9; }
+  .org-desc { font-size: 13px; color: #64748B; margin-top: 2px; line-height: 1.5; }
+  .org-meta {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .org-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    color: #64748B;
+  }
+  .org-meta-item i { font-size: 14px; }
+  /* pipeline bar */
+  .pipeline-bar {
+    display: flex;
+    gap: 4px;
+    margin-top: 14px;
+  }
+  .pb-stage {
+    flex: 1;
+    height: 4px;
+    border-radius: 2px;
+    background: #334155;
+  }
+  .pb-stage.active { background: #6366F1; }
+  .pb-stage.done { background: #22D3EE; }
+  .pb-label {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 6px;
+  }
+  .pb-label span { font-size: 10px; color: #475569; }
+  .drives-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(99,102,241,0.15);
+    color: #A5B4FC;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-top: 8px;
+  }
+
+  /* DRIVES */
+  .drives-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .drive-row {
+    background: #1E293B;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .drive-row:hover { border-color: #6366F1; }
+  .drive-left { display: flex; align-items: center; gap: 14px; }
+  .drive-org-chip {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+  .drive-role { font-size: 15px; font-weight: 600; color: #F1F5F9; }
+  .drive-sub { font-size: 12px; color: #64748B; margin-top: 2px; }
+  .drive-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .tag {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 9px;
+    border-radius: 20px;
+  }
+  .tag-domain {
+    background: rgba(34,211,238,0.1);
+    color: #22D3EE;
+    border: 1px solid rgba(34,211,238,0.2);
+  }
+  .tag-open {
+    background: rgba(34,197,94,0.1);
+    color: #4ADE80;
+    border: 1px solid rgba(34,197,94,0.2);
+  }
+  .deadline-chip {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    color: #94A3B8;
+  }
+  .deadline-chip i { font-size: 14px; }
+  .btn-apply {
+    background: #6366F1;
+    color: #fff;
+    border: none;
+    padding: 7px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.15s;
+    white-space: nowrap;
+  }
+  .btn-apply:hover { background: #4F46E5; }
+
+  /* DIVIDER */
+  .lp-divider {
+    height: 1px;
+    background: #1E293B;
+    margin: 0 2rem 48px;
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* FOOTER STRIP */
+  .lp-footer {
+    border-top: 1px solid #1E293B;
+    padding: 24px 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .lp-footer-copy { font-size: 13px; color: #475569; }
+  .lp-footer-links { display: flex; gap: 20px; }
+  .lp-footer-links a { font-size: 13px; color: #475569; text-decoration: none; cursor: pointer; }
+  .lp-footer-links a:hover { color: #94A3B8; }
+</style>
+
+<div class="lp-root">
+  <nav class="lp-nav">
+    <div class="lp-logo">
+      <div class="lp-logo-icon">
+        <i class="ti ti-bolt" style="color:#fff;font-size:18px;" aria-hidden="true"></i>
+      </div>
+      RecruitIQ
+    </div>
+    <div class="lp-nav-links">
+      <button class="btn-ghost" onclick="sendPrompt('Show me the login page')">Log in</button>
+      <button class="btn-primary" onclick="sendPrompt('Show me the applicant registration page')">Sign up</button>
+    </div>
+  </nav>
+
+  <section class="lp-hero">
+    <div class="lp-eyebrow">
+      <i class="ti ti-sparkles" style="font-size:12px;" aria-hidden="true"></i>
+      AI-Powered Recruitment
+    </div>
+    <h1 class="lp-h1">Campus recruitment,<br><span>rebuilt from scratch.</span></h1>
+    <p class="lp-sub">Structured pipelines, AI screening, and fair evaluation — for every candidate, every drive, every org on campus.</p>
+    <div class="lp-hero-actions">
+      <button class="btn-primary btn-lg" onclick="sendPrompt('Show me the applicant registration page')">Browse open drives</button>
+      <button class="btn-ghost btn-lg" onclick="sendPrompt('Show me how the recruitment pipeline works')">How it works →</button>
+    </div>
+  </section>
+
+  <div class="lp-stats">
+    <div class="lp-stat">
+      <div class="lp-stat-num">12</div>
+      <div class="lp-stat-label">Active orgs</div>
+    </div>
+    <div class="lp-stat">
+      <div class="lp-stat-num">34</div>
+      <div class="lp-stat-label">Open drives</div>
+    </div>
+    <div class="lp-stat">
+      <div class="lp-stat-num">680+</div>
+      <div class="lp-stat-label">Applications this cycle</div>
+    </div>
+    <div class="lp-stat">
+      <div class="lp-stat-num">100%</div>
+      <div class="lp-stat-label">AI-scored & justified</div>
+    </div>
+  </div>
+
+  <div class="lp-section">
+    <div class="lp-section-header">
+      <div class="lp-section-title">Organizations on campus</div>
+      <span class="lp-section-link" onclick="sendPrompt('Show me all organizations')">View all →</span>
+    </div>
+    <div class="orgs-grid">
+
+      <div class="org-card" onclick="sendPrompt('Show me the Org Hub for CodeCell')">
+        <div class="org-card-header">
+          <div class="org-avatar" style="background:rgba(99,102,241,0.2);color:#818CF8;">CC</div>
+          <div>
+            <div class="org-name">CodeCell</div>
+            <div class="org-desc">Technical club — Dev, ML & Systems</div>
+          </div>
+        </div>
+        <div class="org-meta">
+          <span class="org-meta-item"><i class="ti ti-users" aria-hidden="true"></i> 3 domains</span>
+          <span class="org-meta-item"><i class="ti ti-clock" aria-hidden="true"></i> Recruiting now</span>
+        </div>
+        <div class="drives-badge"><i class="ti ti-circle-filled" style="font-size:8px;" aria-hidden="true"></i> 3 open drives</div>
+        <div class="pipeline-bar" style="margin-top:14px;">
+          <div class="pb-stage done"></div>
+          <div class="pb-stage active"></div>
+          <div class="pb-stage"></div>
+          <div class="pb-stage"></div>
+        </div>
+        <div class="pb-label">
+          <span>Applications open</span>
+          <span>AI Screen → PI</span>
+        </div>
+      </div>
+
+      <div class="org-card" onclick="sendPrompt('Show me the Org Hub for DesignHub')">
+        <div class="org-card-header">
+          <div class="org-avatar" style="background:rgba(236,72,153,0.15);color:#F472B6;">DH</div>
+          <div>
+            <div class="org-name">DesignHub</div>
+            <div class="org-desc">Creative & product design committee</div>
+          </div>
+        </div>
+        <div class="org-meta">
+          <span class="org-meta-item"><i class="ti ti-users" aria-hidden="true"></i> 2 domains</span>
+          <span class="org-meta-item"><i class="ti ti-clock" aria-hidden="true"></i> Deadline soon</span>
+        </div>
+        <div class="drives-badge"><i class="ti ti-circle-filled" style="font-size:8px;" aria-hidden="true"></i> 2 open drives</div>
+        <div class="pipeline-bar" style="margin-top:14px;">
+          <div class="pb-stage done"></div>
+          <div class="pb-stage done"></div>
+          <div class="pb-stage active"></div>
+          <div class="pb-stage"></div>
+        </div>
+        <div class="pb-label">
+          <span>AI screening in progress</span>
+          <span>PI Round next</span>
+        </div>
+      </div>
+
+      <div class="org-card" onclick="sendPrompt('Show me the Org Hub for Venture Cell')">
+        <div class="org-card-header">
+          <div class="org-avatar" style="background:rgba(251,191,36,0.12);color:#FCD34D;">VC</div>
+          <div>
+            <div class="org-name">Venture Cell</div>
+            <div class="org-desc">Entrepreneurship & finance wing</div>
+          </div>
+        </div>
+        <div class="org-meta">
+          <span class="org-meta-item"><i class="ti ti-users" aria-hidden="true"></i> 2 domains</span>
+          <span class="org-meta-item"><i class="ti ti-clock" aria-hidden="true"></i> Recruiting now</span>
+        </div>
+        <div class="drives-badge"><i class="ti ti-circle-filled" style="font-size:8px;" aria-hidden="true"></i> 1 open drive</div>
+        <div class="pipeline-bar" style="margin-top:14px;">
+          <div class="pb-stage done"></div>
+          <div class="pb-stage active"></div>
+          <div class="pb-stage"></div>
+          <div class="pb-stage"></div>
+        </div>
+        <div class="pb-label">
+          <span>Applications open</span>
+          <span>AI Screen next</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="lp-divider"></div>
+
+  <div class="lp-section">
+    <div class="lp-section-header">
+      <div class="lp-section-title">Active recruitment drives</div>
+      <span class="lp-section-link" onclick="sendPrompt('Show me all active drives')">View all →</span>
+    </div>
+    <div class="drives-list">
+
+      <div class="drive-row" onclick="sendPrompt('Show the apply page for Full Stack Developer at CodeCell')">
+        <div class="drive-left">
+          <div class="drive-org-chip" style="background:rgba(99,102,241,0.2);color:#818CF8;">CC</div>
+          <div>
+            <div class="drive-role">Full Stack Developer</div>
+            <div class="drive-sub">CodeCell · Tech Domain</div>
+          </div>
+        </div>
+        <div class="drive-right">
+          <span class="tag tag-domain">Tech</span>
+          <span class="tag tag-open">Open</span>
+          <span class="deadline-chip"><i class="ti ti-calendar" aria-hidden="true"></i> Closes Jul 10</span>
+          <button class="btn-apply" onclick="event.stopPropagation();sendPrompt('Show the apply page for Full Stack Developer at CodeCell')">Apply</button>
+        </div>
+      </div>
+
+      <div class="drive-row" onclick="sendPrompt('Show the apply page for ML Engineer at CodeCell')">
+        <div class="drive-left">
+          <div class="drive-org-chip" style="background:rgba(99,102,241,0.2);color:#818CF8;">CC</div>
+          <div>
+            <div class="drive-role">ML Engineer</div>
+            <div class="drive-sub">CodeCell · ML Domain</div>
+          </div>
+        </div>
+        <div class="drive-right">
+          <span class="tag tag-domain">ML</span>
+          <span class="tag tag-open">Open</span>
+          <span class="deadline-chip"><i class="ti ti-calendar" aria-hidden="true"></i> Closes Jul 10</span>
+          <button class="btn-apply" onclick="event.stopPropagation();sendPrompt('Show the apply page for ML Engineer at CodeCell')">Apply</button>
+        </div>
+      </div>
+
+      <div class="drive-row" onclick="sendPrompt('Show the apply page for UI/UX Designer at DesignHub')">
+        <div class="drive-left">
+          <div class="drive-org-chip" style="background:rgba(236,72,153,0.15);color:#F472B6;">DH</div>
+          <div>
+            <div class="drive-role">UI / UX Designer</div>
+            <div class="drive-sub">DesignHub · Visual Domain</div>
+          </div>
+        </div>
+        <div class="drive-right">
+          <span class="tag tag-domain">Design</span>
+          <span class="tag" style="background:rgba(251,191,36,0.1);color:#FCD34D;border:1px solid rgba(251,191,36,0.2);">AI Screen</span>
+          <span class="deadline-chip"><i class="ti ti-calendar" aria-hidden="true"></i> Closed Jul 5</span>
+          <button class="btn-apply" style="background:#334155;cursor:not-allowed;" disabled>Closed</button>
+        </div>
+      </div>
+
+      <div class="drive-row" onclick="sendPrompt('Show the apply page for Finance Analyst at Venture Cell')">
+        <div class="drive-left">
+          <div class="drive-org-chip" style="background:rgba(251,191,36,0.12);color:#FCD34D;">VC</div>
+          <div>
+            <div class="drive-role">Finance Analyst</div>
+            <div class="drive-sub">Venture Cell · Finance Domain</div>
+          </div>
+        </div>
+        <div class="drive-right">
+          <span class="tag tag-domain">Finance</span>
+          <span class="tag tag-open">Open</span>
+          <span class="deadline-chip"><i class="ti ti-calendar" aria-hidden="true"></i> Closes Jul 15</span>
+          <button class="btn-apply" onclick="event.stopPropagation();sendPrompt('Show the apply page for Finance Analyst at Venture Cell')">Apply</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="lp-footer">
+    <div class="lp-footer-copy">RecruitIQ — NIT Raipur · BuildSprint 2026</div>
+    <div class="lp-footer-links">
+      <a onclick="sendPrompt('Show me the admin login')">Admin login</a>
+      <a onclick="sendPrompt('Show me the interviewer login')">Interviewer login</a>
+    </div>
+  </footer>
+</div>
